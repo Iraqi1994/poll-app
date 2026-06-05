@@ -3,6 +3,18 @@
   src: url('/fonts/NerkoOne-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Italic-VariableFont_wght.ttf') format('truetype');
+  font-style: italic;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

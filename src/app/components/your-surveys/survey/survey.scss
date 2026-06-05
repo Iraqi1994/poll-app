@@ -1,0 +1,46 @@
+.survey {
+  width: 320px;
+  height: 310px;
+  background-color: #faf5fe;
+  border-top-right-radius: 80px;
+  padding: 40px 18px;
+  font-family: 'Mulish', sans-serif;
+  color: #35273a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__category {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__title {
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  &__ends {
+    font-size: 12px;
+    font-weight: 500;
+    background-color: #ffcfa1;
+    border-top-right-radius: 14px;
+    padding: 4px 8px;
+    align-self: flex-start;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f4e9fb;
+
+    .survey__ends {
+      background-color: #ffb770;
+    }
+  }
+}

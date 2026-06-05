@@ -1,0 +1,27 @@
+.your-surveys {
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-top: 50px;
+
+  > h3 {
+    color: #ffffff;
+    font-size: 32px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+}
+
+h2 {
+  font-family: 'Nerko One', sans-serif;
+  color: #ffb770;
+  font-size: 72px;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.surveys {
+  display: flex;
+  gap: 48px;
+}
