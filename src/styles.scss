@@ -15,6 +15,11 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'Nokora';
+  src: url('/fonts/Nokora-VariableFont_wght.ttf') format('truetype');
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

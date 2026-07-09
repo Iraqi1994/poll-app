@@ -1,0 +1,37 @@
+.survey {
+  height: 127px;
+  width: 513px;
+  padding: 12px 20px;
+  border-radius: 5px 50px 5px 5px;
+  background-color: #433447;
+  font-family: 'Mulish', sans-serif;
+  transition: background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__category {
+    color: #ffcfa1;
+    font-size: 14px;
+  }
+
+  &__title {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  &__ends {
+    color: #221227;
+    background-color: #ffcfa1;
+    font-size: 12px;
+    align-self: flex-end;
+    padding: 3px 6px;
+    border-top-right-radius: 14px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: #5c4862;
+  }
+}

@@ -1,0 +1,49 @@
+.active-surveys {
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-top: 50px;
+
+  &__buttons {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  &__button {
+    color: #35273a;
+    background-color: #fee9d4;
+    padding: 2px 10px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nokora', sans-serif;
+
+    &.active {
+      background-color: #ffb770;
+    }
+  }
+
+  &__surveys {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 16px;
+    height: 413px;
+    width: max-content;
+    overflow-y: auto;
+    padding-right: 16px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #ffb770;
+      min-height: 64px;
+      border-radius: 4px;
+    }
+  }
+}

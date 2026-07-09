@@ -9,6 +9,7 @@ h1 {
   font-size: 120px;
   font-family: 'Nerko One', sans-serif;
   line-height: 1;
+  white-space: nowrap;
 }
 
 p {
@@ -19,7 +20,7 @@ p {
   font-family: 'Mulish', sans-serif;
 }
 
-img {
+.atf-img {
   margin-left: 100px;
 }
 
@@ -31,8 +32,33 @@ button {
   margin-top: 20px;
   font-weight: 600;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+
+  .btn-icon {
+    width: 0;
+    height: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: 0;
+    transition:
+      width 0.3s ease,
+      margin-left 0.3s ease;
+  }
 
   &:hover {
     cursor: pointer;
+    width: 174px;
+    background-color: #ffb770;
+
+    .btn-icon {
+      width: 20px;
+      margin-left: 8px;
+    }
   }
 }
