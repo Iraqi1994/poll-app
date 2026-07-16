@@ -1,1 +1,29 @@
-<p>question works!</p>
+<div class="question-block" [formGroup]="questionGroup()">
+  <p class="question-label">{{ questionIndex() }}. Question</p>
+  <input
+    type="text"
+    class="question-input"
+    placeholder="Enter your question"
+    formControlName="text"
+  />
+
+  <div class="answers-header">
+    <span class="answers-label">Answers</span>
+    <label class="multiple-answers-label">
+      <input type="checkbox" formControlName="allowMultiple" />
+      Allows multiple answers.
+    </label>
+  </div>
+
+  @for (control of answerControls; track $index) {
+    <div class="answer-row">
+      <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
+      <input type="text" class="answer-input" [formControl]="control" />
+    </div>
+  }
+
+  <button type="button" class="add-answer-btn" (click)="addAnswer()">
+    <span>Add answer</span>
+    <img src="/new-survey-add-circle.svg" alt="Add circle" />
+  </button>
+</div>

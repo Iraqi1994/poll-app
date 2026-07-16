@@ -1,15 +1,33 @@
 <section>
-  <form [formGroup]="surveyForm">
-    <label for="name">Survey Name:</label>
-    <input type="text" id="name" placeholder="Enter survey name" formControlName="name" />
-    <label for="description">Survey Description:</label>
-    <textarea
-      id="description"
-      placeholder="Enter survey description"
-      formControlName="description"
-    ></textarea>
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" formControlName="endDate" />
-    <button routerLink="/">Publish</button>
-  </form>
+  <p class="draft">Draft</p>
+  <h1>Create new survey</h1>
+  <div>
+    <form [formGroup]="surveyForm">
+      <div class="survey-meta">
+        <div class="survey-meta__left">
+          <label for="name">Survey Name</label>
+          <input type="text" id="name" formControlName="name" />
+          <label for="endDate">End Date</label>
+          <input type="date" id="endDate" formControlName="endDate" />
+        </div>
+        <div class="survey-meta__right">
+          <label for="description">Survey Description</label>
+          <textarea id="description" formControlName="description"></textarea>
+        </div>
+      </div>
+
+      <div class="survey-questions">
+        @for (question of questionGroups; track $index) {
+          <app-question [questionGroup]="question" [questionIndex]="$index + 1" />
+        }
+
+        <button type="button" class="add-question-btn" (click)="addQuestion()">
+          <span>Add next question</span>
+          <img src="/new-survey-add-circle.svg" alt="add circle" />
+        </button>
+      </div>
+
+      <button routerLink="/">Publish</button>
+    </form>
+  </div>
 </section>
