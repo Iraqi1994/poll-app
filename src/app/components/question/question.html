@@ -5,7 +5,9 @@
     class="question-input"
     placeholder="Enter your question"
     formControlName="text"
+    maxlength="150"
   />
+  <span class="char-counter">{{ questionTextLength }} / 150</span>
 
   <div class="answers-header">
     <span class="answers-label">Answers</span>

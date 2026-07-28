@@ -27,7 +27,10 @@ export class NewSurveyForm {
 
   private createQuestion(required: boolean): FormGroup {
     return new FormGroup({
-      text: new FormControl('', required ? [Validators.required] : []),
+      text: new FormControl(
+        '',
+        required ? [Validators.required, Validators.maxLength(150)] : [Validators.maxLength(150)],
+      ),
       allowMultiple: new FormControl(false),
       answers: new FormArray([new FormControl(''), new FormControl('')]),
     });

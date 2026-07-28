@@ -19,6 +19,10 @@ export class Question {
     return this.answers.controls as FormControl[];
   }
 
+  get questionTextLength(): number {
+    return this.questionGroup().get('text')?.value?.length ?? 0;
+  }
+
   getAnswerLabel(index: number): string {
     return String.fromCharCode(65 + index);
   }
