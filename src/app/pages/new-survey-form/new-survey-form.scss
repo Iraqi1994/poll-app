@@ -92,6 +92,28 @@ h1 {
   gap: 16px;
 }
 
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.publish-btn {
+  height: 48px;
+  width: 95px;
+  background-color: #ffcfa1;
+  color: #221227;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Nokora', sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ffb97a;
+  }
+}
+
 .add-question-btn {
   background-color: #ffb7704d;
   color: #fefdff;

@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Question } from '../../components/question/question';
 
 @Component({
   selector: 'app-new-survey-form',
-  imports: [RouterLink, ReactiveFormsModule, Question],
+  imports: [ReactiveFormsModule, Question],
   templateUrl: './new-survey-form.html',
   styleUrl: './new-survey-form.scss',
 })
@@ -38,5 +37,9 @@ export class NewSurveyForm {
 
   addQuestion(): void {
     this.questions.push(this.createQuestion(false));
+  }
+
+  onPublish(): void {
+    // TODO: implement survey submission
   }
 }
