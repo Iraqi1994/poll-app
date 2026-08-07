@@ -1,9 +1,9 @@
 header {
-  margin-left: 111px;
-  margin-top: 39px;
+  margin-left: clamp(16px, 5.8vw, 111px);
+  margin-top: clamp(20px, 2vw, 39px);
 }
 
 .logo {
-  height: 92px;
-  width: 238px;
+  height: clamp(60px, 4.8vw, 92px);
+  width: auto;
 }

@@ -1,12 +1,18 @@
 .atf {
-  margin: 0 100px;
-  margin-top: 100px;
+  margin: 0 clamp(16px, 5.2vw, 100px);
+  margin-top: clamp(40px, 5.2vw, 100px);
   display: flex;
+  align-items: flex-start;
+}
+
+.atf__text {
+  flex: 1;
+  min-width: 0;
 }
 
 h1 {
   color: #ffb770;
-  font-size: 120px;
+  font-size: clamp(36px, 6.25vw, 120px);
   font-family: 'Nerko One', sans-serif;
   line-height: 1;
   white-space: nowrap;
@@ -14,14 +20,48 @@ h1 {
 
 p {
   color: #ffffff;
-  font-size: 24px;
+  font-size: clamp(16px, 1.25vw, 24px);
   margin-top: 20px;
-  width: 700px;
+  width: min(700px, 100%);
   font-family: 'Mulish', sans-serif;
 }
 
 .atf-img {
-  margin-left: 100px;
+  margin-left: clamp(16px, 5.2vw, 100px);
+  max-width: 45%;
+  height: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .atf {
+    flex-direction: column;
+  }
+
+  // unwrap the text div so h1, p, button can be ordered alongside the image
+  .atf__text {
+    display: contents;
+  }
+
+  h1 {
+    order: 1;
+    white-space: normal;
+  }
+
+  .atf-img {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  p {
+    order: 3;
+  }
+
+  button {
+    order: 4;
+  }
 }
 
 button {

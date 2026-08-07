@@ -1,7 +1,7 @@
 .active-surveys {
-  margin-left: 200px;
-  margin-right: 200px;
-  margin-top: 50px;
+  margin-left: clamp(16px, 10.4vw, 200px);
+  margin-right: clamp(16px, 10.4vw, 200px);
+  margin-top: clamp(32px, 2.6vw, 50px);
 
   &__buttons {
     display: flex;
@@ -25,10 +25,9 @@
 
   &__surveys {
     display: grid;
-    grid-template-columns: repeat(2, max-content);
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     height: 413px;
-    width: max-content;
     overflow-y: auto;
     padding-right: 16px;
 
@@ -45,5 +44,14 @@
       min-height: 64px;
       border-radius: 4px;
     }
+  }
+}
+
+@media (max-width: 900px) {
+  .active-surveys__surveys {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: 500px;
+    padding-right: 8px;
   }
 }
