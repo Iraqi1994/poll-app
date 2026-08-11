@@ -1,6 +1,9 @@
 <section>
   <p class="draft">Draft</p>
-  <h1>Create new survey</h1>
+  <div class="survey-header">
+    <h1>Create new survey</h1>
+    <a routerLink="/" class="cancel-btn">Cancel ✕</a>
+  </div>
   <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublish()">
     <div class="survey-meta">
       <div class="survey-meta__left">

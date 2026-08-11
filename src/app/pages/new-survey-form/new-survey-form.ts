@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Question } from '../../components/question/question';
 
 @Component({
   selector: 'app-new-survey-form',
-  imports: [ReactiveFormsModule, Question],
+  imports: [ReactiveFormsModule, RouterLink, Question],
   templateUrl: './new-survey-form.html',
   styleUrl: './new-survey-form.scss',
 })
