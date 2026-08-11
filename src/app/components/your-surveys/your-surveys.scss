@@ -26,3 +26,27 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: clamp(16px, 2.5vw, 48px);
 }
+
+@media (max-width: 767px) {
+  .surveys {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #ffb770;
+      min-width: 64px;
+      border-radius: 4px;
+    }
+  }
+}

@@ -38,7 +38,6 @@ p {
     flex-direction: column;
   }
 
-  // unwrap the text div so h1, p, button can be ordered alongside the image
   .atf__text {
     display: contents;
   }
@@ -50,8 +49,6 @@ p {
 
   .atf-img {
     order: 2;
-    width: 100%;
-    max-width: 100%;
     margin-left: 0;
   }
 
