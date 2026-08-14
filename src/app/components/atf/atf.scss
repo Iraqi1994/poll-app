@@ -36,6 +36,7 @@ p {
 @media (max-width: 767px) {
   .atf {
     flex-direction: column;
+    align-items: center;
   }
 
   .atf__text {
