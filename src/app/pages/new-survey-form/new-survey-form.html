@@ -4,7 +4,10 @@
 <section>
   <div class="survey-header">
     <p class="draft">Draft</p>
-    <a routerLink="/" class="cancel-btn"><span class="cancel-text">Cancel</span> ✕</a>
+    <a routerLink="/" class="cancel-btn">
+      <span class="cancel-text">Cancel</span>
+      <img src="/close.svg" alt="Close" />
+    </a>
   </div>
   <h1>Create new survey</h1>
   <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublish()">

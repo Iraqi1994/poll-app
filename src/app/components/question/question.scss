@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: #fefdff;
 }
 
 .question-label {
-  font-weight: 600;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
   margin: 0;
 }
 
@@ -18,7 +18,7 @@
   border: 1px solid #ccc;
   font-size: 14px;
   box-sizing: border-box;
-  color: inherit;
+  color: #35273a;
   outline: none;
 
   &:focus {
@@ -37,11 +37,13 @@
 .answers-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   margin-top: 8px;
 }
 
 .answers-label {
+  font-family: 'Mulish', sans-serif;
   font-weight: 600;
 }
 
@@ -50,6 +52,8 @@
   align-items: center;
   gap: 6px;
   font-size: 14px;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 400;
   cursor: pointer;
 
   input[type='checkbox'] {
@@ -64,6 +68,7 @@
 }
 
 .answer-letter {
+  font-family: 'Mulish', sans-serif;
   font-weight: 600;
   min-width: 20px;
 }
@@ -76,7 +81,7 @@
   border: 1px solid #ccc;
   font-size: 14px;
   box-sizing: border-box;
-  color: inherit;
+  color: #35273a;
   outline: none;
 
   &:focus {
