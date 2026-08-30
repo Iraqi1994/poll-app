@@ -1,59 +1,90 @@
 # PollApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
+A survey/polling web application built with Angular 21. Users can browse active surveys, view their own surveys, and create new ones via a guided form.
 
-## Development server
+> **Note:** This project is currently in development. Several features are not yet implemented (e.g. survey submission, backend integration, dynamic survey data).
 
-To start a local development server, run:
+## Tech Stack
+
+- **Angular 21** with standalone components and reactive forms
+- **Angular Router** for client-side navigation
+- **Supabase** as the backend service (database, auth, API)
+- **Vitest** for unit testing
+- **TypeScript 5.9**
+
+## Pages
+
+| Route         | Component       | Description                                                     |
+| ------------- | --------------- | --------------------------------------------------------------- |
+| `/`           | `Home`          | Landing page with ATF section, active surveys, and your surveys |
+| `/new-survey` | `NewSurveyForm` | Form to create and publish a new survey                         |
+
+## Project Structure
+
+```
+src/app/
+├── pages/
+│   ├── home/               # Landing page
+│   └── new-survey-form/    # Survey creation form
+└── components/
+    ├── header/             # App header
+    ├── atf/                # Above-the-fold hero section
+    ├── active-surveys/     # Browseable list of active/past surveys
+    ├── your-surveys/       # User's own surveys (ending soon highlighted)
+    └── question/           # Reusable question block within the survey form
+```
+
+## Features
+
+- **Home page** with a hero section linking to survey creation
+- **Active Surveys** tab with toggle between active and past surveys
+- **Your Surveys** section highlighting surveys ending soon
+- **New Survey Form** with:
+  - Survey name, description, and optional end date
+  - Dynamic question builder (add questions and answers)
+  - Per-question "allow multiple answers" toggle
+  - Character limits and required-field validation
+
+## What's Not Yet Implemented
+
+- Survey submission (`onPublish()` is a stub)
+- Real survey data — lists currently render placeholder `<app-survey>` components
+- Supabase integration (database, auth, API)
+- User authentication
+
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the dev server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
+Open `http://localhost:4200/` in your browser. The app reloads automatically on file changes.
 
 ## Building
-
-To build the project run:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build artifacts are placed in `dist/`. Production builds are optimized by default.
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Running Unit Tests
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Tests are run with [Vitest](https://vitest.dev/).
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI Overview](https://angular.dev/tools/cli)
+- [Angular Reactive Forms](https://angular.dev/guide/forms/reactive-forms)
