@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-survey',
+  selector: 'app-your-survey',
   imports: [],
   templateUrl: './survey.html',
   styleUrl: './survey.scss',
 })
-export class Survey {
-
-}
+export class YourSurvey {}
