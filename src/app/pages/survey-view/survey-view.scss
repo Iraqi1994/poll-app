@@ -1,0 +1,137 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: clamp(20px, 3vw, 39px) clamp(16px, 5.8vw, 64px) 64px;
+}
+
+.survey-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+
+  &__logo {
+    height: clamp(44px, 3.6vw, 60px);
+    width: auto;
+  }
+}
+
+.create-btn {
+  background-color: #ffcfa1;
+  color: #221227;
+  font-family: 'Nokora', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #ffb97a;
+  }
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  gap: 40px;
+  align-items: start;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.survey-card {
+  background-color: #faf5fe;
+  border-radius: 5px 100px 5px 5px;
+  padding: 40px 52px;
+  color: #35273a;
+
+  &__status {
+    display: inline-block;
+    background-color: #ffcfa1;
+    color: #221227;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    border-top-right-radius: 14px;
+    padding: 3px 12px;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 12px;
+    color: #7a6f80;
+    margin: 12px 0 4px;
+  }
+
+  &__title {
+    font-family: 'Nerko One', sans-serif;
+    font-weight: 400;
+    font-size: clamp(36px, 3.4vw, 52px);
+    color: #ee9236;
+    margin: 8px 0 12px;
+  }
+
+  &__description {
+    font-family: 'Mulish', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 620px;
+    margin-bottom: 28px;
+  }
+
+  &__questions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 32px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 28px;
+  }
+}
+
+.complete-btn {
+  background-color: #ffcfa1;
+  color: #221227;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Nokora', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #ffb97a;
+  }
+}
+
+.results-panel {
+  padding-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .survey-card {
+    padding: 28px 20px;
+
+    &__questions {
+      grid-template-columns: 1fr;
+    }
+  }
+}

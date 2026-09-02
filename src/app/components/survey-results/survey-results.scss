@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  font-family: 'Mulish', sans-serif;
+  color: #35273a;
+}
+
+.results-title {
+  font-family: 'Nerko One', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  margin: 0 0 20px;
+}
+
+.results-live {
+  color: #ee9236;
+}
+
+.result-block {
+  margin-bottom: 20px;
+}
+
+.result-question {
+  font-weight: 700;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.bar-letter {
+  font-weight: 700;
+  min-width: 12px;
+}
+
+.bar-track {
+  flex: 1;
+  height: 10px;
+  background-color: #ece7f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  background-color: #ffb770;
+  border-radius: 999px;
+}
+
+.bar-percent {
+  min-width: 34px;
+  text-align: right;
+  color: #7a6f80;
+}

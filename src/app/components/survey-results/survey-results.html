@@ -1,0 +1,17 @@
+<h2 class="results-title">Survey results <span class="results-live">LIVE</span></h2>
+
+@for (question of questions(); track question.id) {
+  <div class="result-block">
+    <p class="result-question">{{ $index + 1 }}. {{ question.text }}</p>
+
+    @for (answer of question.answers; track answer.id) {
+      <div class="bar-row">
+        <span class="bar-letter">{{ getAnswerLabel($index) }}</span>
+        <span class="bar-track">
+          <span class="bar-fill" [style.width.%]="percentFor(answer.id)"></span>
+        </span>
+        <span class="bar-percent">{{ percentFor(answer.id) }}%</span>
+      </div>
+    }
+  </div>
+}
