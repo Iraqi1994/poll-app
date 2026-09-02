@@ -1,0 +1,41 @@
+.question-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Mulish', sans-serif;
+  color: #35273a;
+}
+
+.question-label {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0;
+}
+
+.question-hint {
+  font-size: 12px;
+  color: #7a6f80;
+  margin: -4px 0 4px;
+}
+
+.answer-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.answer-checkbox {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  border: 1px solid #35273a;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.answer-letter {
+  font-weight: 700;
+  min-width: 16px;
+}

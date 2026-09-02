@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { ActiveSurveys } from './active-surveys';
+import { SurveyView } from './survey-view';
 
-describe('ActiveSurveys', () => {
-  let component: ActiveSurveys;
-  let fixture: ComponentFixture<ActiveSurveys>;
+describe('SurveyView', () => {
+  let component: SurveyView;
+  let fixture: ComponentFixture<SurveyView>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ActiveSurveys],
+      imports: [SurveyView],
       providers: [provideRouter([])]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ActiveSurveys);
+    fixture = TestBed.createComponent(SurveyView);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
