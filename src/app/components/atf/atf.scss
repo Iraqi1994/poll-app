@@ -33,39 +33,11 @@ p {
   flex-shrink: 0;
 }
 
-@media (max-width: 767px) {
-  .atf {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .atf__text {
-    display: contents;
-  }
-
-  h1 {
-    order: 1;
-    white-space: normal;
-  }
-
-  .atf-img {
-    order: 2;
-    margin-left: 0;
-  }
-
-  p {
-    order: 3;
-  }
-
-  button {
-    order: 4;
-  }
-}
-
 button {
   width: 138px;
   height: 48px;
   border-radius: 10px;
+  border: none;
   background-color: #ffcfa1;
   margin-top: 20px;
   font-weight: 600;
@@ -98,5 +70,34 @@ button {
       width: 20px;
       margin-left: 8px;
     }
+  }
+}
+
+@media (max-width: 767px) {
+  .atf {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .atf__text {
+    display: contents;
+  }
+
+  h1 {
+    order: 1;
+    white-space: normal;
+  }
+
+  .atf-img {
+    order: 2;
+    margin-left: 0;
+  }
+
+  p {
+    order: 3;
+  }
+
+  button {
+    order: 4;
   }
 }
