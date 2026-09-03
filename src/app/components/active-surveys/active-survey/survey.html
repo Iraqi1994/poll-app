@@ -1,0 +1,11 @@
+<div class="survey">
+  <p class="survey__category">Category</p>
+  <h3 class="survey__title">{{ survey().name ?? 'Untitled Survey' }}</h3>
+  <p class="survey__ends">
+    @if (survey().end_date) {
+      Ends {{ survey().end_date | date: 'mediumDate' }}
+    } @else {
+      No end date
+    }
+  </p>
+</div>
