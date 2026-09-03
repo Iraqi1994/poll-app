@@ -5,25 +5,10 @@ import { SurveyRow } from '../interfaces/surveyRow';
 import { QuestionRow } from '../interfaces/questionRow';
 import { OptionRow } from '../interfaces/optionRow';
 import { VoteRow } from '../interfaces/voteRow';
+import { CacheShape } from '../interfaces/cacheShape';
+import { isPast } from '../utils/dates';
 
 const CACHE_KEY = 'survey-store/v1';
-
-interface CacheShape {
-  version: 1;
-  savedAt: number;
-  surveys: SurveyRow[];
-  questions: QuestionRow[];
-  options: OptionRow[];
-  votes: VoteRow[];
-}
-
-function isPast(endDate: string | null): boolean {
-  if (!endDate) {
-    return false;
-  }
-  const time = Date.parse(endDate);
-  return !Number.isNaN(time) && time < Date.now();
-}
 
 /**
  * Central owner of every dataset read from Supabase. Components read its signals instead of

@@ -1,4 +1,4 @@
-<div class="survey">
+<div class="survey" [routerLink]="['/survey', survey().id]">
   <p class="survey__category">Category</p>
   <h3 class="survey__title">{{ survey().name ?? 'Untitled Survey' }}</h3>
   <p class="survey__ends">

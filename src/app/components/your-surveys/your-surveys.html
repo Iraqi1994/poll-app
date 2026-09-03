@@ -1,9 +1,16 @@
 <h2>Your surveys</h2>
 <div class="your-surveys">
   <h3>Ending soon surveys</h3>
+  @if (loading() && endingSoon().length === 0) {
+    <p class="your-surveys__status">Loading surveys…</p>
+  } @else if (error() && endingSoon().length === 0) {
+    <p class="your-surveys__status">Couldn't load surveys. {{ error() }}</p>
+  }
   <article class="surveys">
-    <app-your-survey></app-your-survey>
-    <app-your-survey></app-your-survey>
-    <app-your-survey></app-your-survey>
+    @for (survey of endingSoon(); track survey.id) {
+      <app-your-survey [survey]="survey"></app-your-survey>
+    } @empty {
+      <p class="your-surveys__status">No surveys to show.</p>
+    }
   </article>
 </div>

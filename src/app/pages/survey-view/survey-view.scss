@@ -35,6 +35,14 @@
   }
 }
 
+.survey-view-status {
+  font-family: 'Mulish', sans-serif;
+  font-size: 14px;
+  color: #7a6f80;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
