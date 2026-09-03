@@ -1,16 +1,14 @@
 <section class="active-surveys">
-  <div class="active-surveys__buttons">
-    <button class="active-surveys__button active">Active Surveys</button>
-    <button class="active-surveys__button">Past Surveys</button>
-  </div>
+  @if (loading() && surveys().length === 0) {
+    <p class="active-surveys__status">Loading surveys…</p>
+  } @else if (error() && surveys().length === 0) {
+    <p class="active-surveys__status">Couldn't load surveys. {{ error() }}</p>
+  }
   <div class="active-surveys__surveys">
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
-    <app-active-survey></app-active-survey>
+    @for (survey of surveys(); track survey.id) {
+      <app-active-survey [survey]="survey"></app-active-survey>
+    } @empty {
+      <p class="active-surveys__empty">No surveys to show.</p>
+    }
   </div>
 </section>
