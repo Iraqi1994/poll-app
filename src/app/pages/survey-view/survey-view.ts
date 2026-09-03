@@ -1,91 +1,60 @@
-import { Component, input } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Survey, SurveyResults as SurveyResultsMap } from '../../models/survey';
+import { Survey, SurveyQuestion, SurveyResults as SurveyResultsMap } from '../../models/survey';
 import { SurveyQuestionView } from '../../components/survey-question-view/survey-question-view';
 import { SurveyResults } from '../../components/survey-results/survey-results';
+import { SurveyStore } from '../../services/survey-store';
+import { isPast } from '../../utils/dates';
 
 @Component({
   selector: 'app-survey-view',
-  imports: [RouterLink, SurveyQuestionView, SurveyResults],
+  imports: [RouterLink, DatePipe, SurveyQuestionView, SurveyResults],
   templateUrl: './survey-view.html',
   styleUrl: './survey-view.scss',
 })
 export class SurveyView {
-  // Route param `survey/:id`. Not used to look anything up yet — the survey below is a placeholder.
+  private readonly store = inject(SurveyStore);
+
+  // Route param `survey/:id`.
   id = input<string>();
 
-  survey: Survey = {
-    id: '1',
-    title: "Let's Plan the Next Team Event Together",
-    description:
-      'We want to create team activities that everyone will enjoy – share your preferences and ideas in our survey to help us plan better experiences together.',
-    category: 'Team activities',
-    endsOn: '01.09.2025',
-    status: 'published',
-    questions: [
-      {
-        id: 'q1',
-        text: 'Which date would work best for you?',
-        allowMultiple: true,
-        answers: [
-          { id: 'q1a', text: '19.09.2025, Friday' },
-          { id: 'q1b', text: '10.10.2025, Friday' },
-          { id: 'q1c', text: '11.10.2025, Saturday' },
-          { id: 'q1d', text: '31.10.2025, Friday' },
-        ],
-      },
-      {
-        id: 'q2',
-        text: 'Choose the activities you prefer',
-        allowMultiple: true,
-        answers: [
-          { id: 'q2a', text: 'Outdoor adventure like kayaking' },
-          { id: 'q2b', text: 'Office Costume Party' },
-          { id: 'q2c', text: 'Bowling, mini-golf, volleyball' },
-          { id: 'q2d', text: 'Beach party, Music & cocktails' },
-          { id: 'q2e', text: 'Escape room' },
-        ],
-      },
-      {
-        id: 'q3',
-        text: "What's most important to you in a team event?",
-        allowMultiple: false,
-        answers: [
-          { id: 'q3a', text: 'Team bonding' },
-          { id: 'q3b', text: 'Food and drinks' },
-          { id: 'q3c', text: 'Trying something new' },
-          { id: 'q3d', text: 'Keeping it low-key and stress-free' },
-        ],
-      },
-      {
-        id: 'q4',
-        text: 'How long would you prefer the event to last?',
-        allowMultiple: false,
-        answers: [
-          { id: 'q4a', text: 'Half a day' },
-          { id: 'q4b', text: 'Full day' },
-          { id: 'q4c', text: 'Evening only' },
-        ],
-      },
-    ],
-  };
+  readonly loading = this.store.loading;
+  readonly error = this.store.error;
 
-  results: SurveyResultsMap = {
-    q1a: 27,
-    q1b: 44,
-    q1c: 3,
-    q1d: 26,
-    q2a: 60,
-    q2b: 0,
-    q2c: 14,
-    q2d: 26,
-    q2e: 0,
-    q3a: 44,
-    q3b: 3,
-    q3c: 26,
-    q3d: 27,
-    q4a: 14,
-    q4b: 86,
-    q4c: 0,
-  };
+  /** The requested survey assembled from the store's flat signals, or `null` when not found. */
+  readonly survey = computed<Survey | null>(() => {
+    const id = this.id();
+    const row = this.store.surveys().find((s) => String(s.id) === id);
+    if (!row) {
+      return null;
+    }
+
+    const questions: SurveyQuestion[] = this.store
+      .questions()
+      .filter((q) => q.survey_id === row.id)
+      .map((q) => ({
+        id: String(q.id),
+        text: q.text ?? '',
+        allowMultiple: q.type === 'multiple',
+        answers: this.store
+          .options()
+          .filter((o) => o.question_id === q.id)
+          .map((o) => ({ id: String(o.id), text: o.text ?? '' })),
+      }));
+
+    return {
+      id: String(row.id),
+      title: row.name ?? 'Untitled survey',
+      description: row.description ?? '',
+      // No category column yet — placeholder until one exists.
+      category: 'General',
+      endsOn: row.end_date ?? '',
+      status: isPast(row.end_date) ? 'completed' : 'published',
+      questions,
+    };
+  });
+
+  // Votes are wired in the next step; an empty map renders every results bar at 0%.
+  readonly results = computed<SurveyResultsMap>(() => ({}));
 }

@@ -16,7 +16,7 @@ export interface Survey {
   description: string;
   category: string;
   endsOn: string;
-  status: 'draft' | 'published';
+  status: 'draft' | 'published' | 'completed';
   questions: SurveyQuestion[];
 }
 

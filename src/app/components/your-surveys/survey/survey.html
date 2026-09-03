@@ -1,7 +1,13 @@
-<div class="survey" routerLink="/survey/1">
+<div class="survey" [routerLink]="['/survey', survey().id]">
   <div class="survey__header">
-    <p class="survey__category">Team activities</p>
-    <span class="survey__title">Let's Plan the Next Team Event Together</span>
+    <p class="survey__category">Category</p>
+    <span class="survey__title">{{ survey().name ?? 'Untitled Survey' }}</span>
   </div>
-  <span class="survey__ends">Ends in 1 Day</span>
+  <span class="survey__ends">
+    @if (survey().end_date) {
+      Ends {{ survey().end_date | date: 'mediumDate' }}
+    } @else {
+      No end date
+    }
+  </span>
 </div>

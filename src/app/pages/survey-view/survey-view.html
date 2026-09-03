@@ -3,30 +3,38 @@
   <a routerLink="/new-survey" class="create-btn">Create survey</a>
 </header>
 
-<div class="layout">
-  <section class="survey-card">
-    <p class="survey-card__status">Published</p>
+@if (survey(); as survey) {
+  <div class="layout">
+    <section class="survey-card">
+      <p class="survey-card__status">
+        {{ survey.status === 'completed' ? 'Completed' : 'Published' }}
+      </p>
 
-    <div class="survey-card__meta">
-      <span>Ends on {{ survey.endsOn }}</span>
-      <span>Category: {{ survey.category }}</span>
-    </div>
+      <div class="survey-card__meta">
+        <span>Ends on {{ survey.endsOn | date: 'mediumDate' }}</span>
+        <span>Category: {{ survey.category }}</span>
+      </div>
 
-    <h1 class="survey-card__title">{{ survey.title }}</h1>
-    <p class="survey-card__description">{{ survey.description }}</p>
+      <h1 class="survey-card__title">{{ survey.title }}</h1>
+      <p class="survey-card__description">{{ survey.description }}</p>
 
-    <div class="survey-card__questions">
-      @for (question of survey.questions; track question.id) {
-        <app-survey-question-view [question]="question" [index]="$index + 1" />
-      }
-    </div>
+      <div class="survey-card__questions">
+        @for (question of survey.questions; track question.id) {
+          <app-survey-question-view [question]="question" [index]="$index + 1" />
+        }
+      </div>
 
-    <div class="survey-card__footer">
-      <button type="button" class="complete-btn">Complete survey</button>
-    </div>
-  </section>
+      <div class="survey-card__footer">
+        <button type="button" class="complete-btn">Complete survey</button>
+      </div>
+    </section>
 
-  <aside class="results-panel">
-    <app-survey-results [questions]="survey.questions" [results]="results" />
-  </aside>
-</div>
+    <aside class="results-panel">
+      <app-survey-results [questions]="survey.questions" [results]="results()" />
+    </aside>
+  </div>
+} @else if (loading()) {
+  <p class="survey-view-status">Loading survey…</p>
+} @else {
+  <p class="survey-view-status">Survey not found.</p>
+}
