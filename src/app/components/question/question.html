@@ -1,19 +1,26 @@
 <div class="question-block" [formGroup]="questionGroup()">
-  <p class="question-label">{{ questionIndex() }}. Question</p>
-  <input
-    type="text"
-    class="question-input"
-    placeholder="Enter your question"
-    formControlName="text"
-    maxlength="150"
-  />
+  <div class="question-header">
+    <p class="question-label">{{ questionIndex() }}. Question</p>
+    <app-delete-button label="Remove question {{ questionIndex() }}" (pressed)="remove.emit()" />
+  </div>
+
+  <div class="field-row">
+    <input
+      type="text"
+      class="question-input"
+      placeholder="Enter your question"
+      formControlName="text"
+      maxlength="150"
+    />
+    <app-delete-button label="Clear question text" (pressed)="clearText()" />
+  </div>
   <span class="char-counter">{{ questionTextLength }} / 150</span>
 
   <div class="answers-header">
     <span class="answers-label">Answers</span>
     <label class="multiple-answers-label">
       <input type="checkbox" formControlName="allowMultiple" />
-      Allows multiple answers.
+      Allow multiple answers.
     </label>
   </div>
 
@@ -21,6 +28,10 @@
     <div class="answer-row">
       <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
       <input type="text" class="answer-input" [formControl]="control" />
+      <app-delete-button
+        label="Remove answer {{ getAnswerLabel($index) }}"
+        (pressed)="removeAnswer($index)"
+      />
     </div>
   }
 

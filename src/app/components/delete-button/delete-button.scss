@@ -1,0 +1,35 @@
+.delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fefdff;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &__glyph {
+    width: 24px;
+    height: 24px;
+    background-color: currentColor;
+    -webkit-mask: url('/delete-icon.svg') center / contain no-repeat;
+    mask: url('/delete-icon.svg') center / contain no-repeat;
+  }
+
+  &:hover {
+    background-color: #ffcfa1;
+    color: #35273a;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ee9236;
+    outline-offset: 1px;
+  }
+}

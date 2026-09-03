@@ -13,20 +13,41 @@
   <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublish()">
     <div class="survey-meta">
       <div class="survey-meta__left">
-        <label for="name">Survey Name</label>
-        <input type="text" id="name" formControlName="name" />
-        <label for="endDate">End Date</label>
-        <input type="date" id="endDate" formControlName="endDate" />
+        <label for="name">Survey name</label>
+        <div class="field-row">
+          <input type="text" id="name" formControlName="name" />
+          <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
+        </div>
+
+        <div class="meta-row">
+          <div class="meta-row__col">
+            <label for="endDate">Set end date (optional)</label>
+            <div class="field-row">
+              <input type="date" id="endDate" formControlName="endDate" />
+              <app-delete-button label="Clear end date" (pressed)="clearField('endDate')" />
+            </div>
+          </div>
+          <div class="meta-row__col meta-row__col--category">
+            <app-category-select [categoryControl]="surveyForm.controls.category" />
+          </div>
+        </div>
       </div>
       <div class="survey-meta__right">
-        <label for="description">Survey Description</label>
-        <textarea id="description" formControlName="description"></textarea>
+        <label for="description">Describing text (optional)</label>
+        <div class="field-row field-row--textarea">
+          <textarea id="description" formControlName="description"></textarea>
+          <app-delete-button label="Clear description" (pressed)="clearField('description')" />
+        </div>
       </div>
     </div>
 
     <div class="survey-questions">
       @for (question of questionGroups; track $index) {
-        <app-question [questionGroup]="question" [questionIndex]="$index + 1" />
+        <app-question
+          [questionGroup]="question"
+          [questionIndex]="$index + 1"
+          (remove)="removeQuestion($index)"
+        />
       }
 
       <button type="button" class="add-question-btn" (click)="addQuestion()">

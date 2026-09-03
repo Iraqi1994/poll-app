@@ -1,0 +1,39 @@
+<div class="category-select">
+  <button
+    type="button"
+    class="category-select__trigger"
+    id="category"
+    aria-label="Choose category"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="open()"
+    [disabled]="disabled"
+    (click)="toggle()"
+  >
+    <span>Choose category</span>
+    <span class="category-select__caret" [class.category-select__caret--open]="open()"></span>
+  </button>
+
+  @if (open()) {
+    <ul class="category-select__panel" role="listbox">
+      @for (category of categories; track category) {
+        <li role="option" [attr.aria-selected]="category === value">
+          <button
+            type="button"
+            class="category-select__option"
+            [class.category-select__option--selected]="category === value"
+            (click)="select(category)"
+          >
+            {{ category }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (value) {
+    <div class="category-select__selected">
+      <span>{{ value }}</span>
+      <app-delete-button label="Clear selected category" (pressed)="clear()" />
+    </div>
+  }
+</div>

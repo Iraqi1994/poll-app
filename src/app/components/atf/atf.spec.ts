@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { Atf } from './atf';
 
@@ -8,9 +9,9 @@ describe('Atf', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Atf]
-    })
-    .compileComponents();
+      imports: [Atf],
+      providers: [provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Atf);
     component = fixture.componentInstance;
