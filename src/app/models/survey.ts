@@ -20,5 +20,16 @@ export interface Survey {
   questions: SurveyQuestion[];
 }
 
-/** Maps an answer id to its result percentage (0-100). Used by the results panel. */
 export type SurveyResults = Record<string, number>;
+
+export const SURVEY_CATEGORIES = [
+  'All Surveys',
+  'Team Activities',
+  'Health & Wellness',
+  'Gaming & Entertainment',
+  'Education & Learning',
+  'Lifestyle & Preferences',
+  'Technology & Innovation',
+] as const;
+
+export type SurveyCategory = (typeof SURVEY_CATEGORIES)[number];

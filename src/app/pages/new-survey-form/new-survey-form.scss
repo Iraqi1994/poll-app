@@ -104,14 +104,22 @@ h1 {
   display: flex;
   gap: 24px;
 
+  .field-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    input {
+      flex: 1;
+      margin-bottom: 0;
+    }
+  }
+
   &__left {
     display: flex;
     flex-direction: column;
     width: 50%;
-
-    input {
-      margin-bottom: 16px;
-    }
   }
 
   &__right {
@@ -119,10 +127,42 @@ h1 {
     flex-direction: column;
     width: 50%;
 
-    textarea {
+    .field-row--textarea {
       flex: 1;
-      resize: none;
+      align-items: stretch;
+      margin-bottom: 0;
+
+      textarea {
+        flex: 1;
+        resize: none;
+      }
+
+      app-delete-button {
+        align-self: flex-start;
+      }
     }
+  }
+}
+
+.meta-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+
+  .field-row {
+    margin-bottom: 0;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  &__col--category {
+    // the trigger reads like a label, so line it up with the sibling date label
+    padding-top: 1px;
   }
 }
 
@@ -193,6 +233,11 @@ h1 {
     &__right {
       width: 100%;
     }
+  }
+
+  .meta-row {
+    flex-direction: column;
+    gap: 0;
   }
 
   .survey-questions {
