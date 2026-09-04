@@ -16,13 +16,11 @@ import { isPast } from '../../utils/dates';
 export class SurveyView {
   private readonly store = inject(SurveyStore);
 
-  // Route param `survey/:id`.
   id = input<string>();
 
   readonly loading = this.store.loading;
   readonly error = this.store.error;
 
-  /** The requested survey assembled from the store's flat signals, or `null` when not found. */
   readonly survey = computed<Survey | null>(() => {
     const id = this.id();
     const row = this.store.surveys().find((s) => String(s.id) === id);
@@ -32,22 +30,21 @@ export class SurveyView {
 
     const questions: SurveyQuestion[] = this.store
       .questions()
-      .filter((q) => q.survey_id === row.id)
-      .map((q) => ({
-        id: String(q.id),
-        text: q.text ?? '',
-        allowMultiple: q.type === 'multiple',
+      .filter((question) => question.survey_id === row.id)
+      .map((question) => ({
+        id: String(question.id),
+        text: question.text ?? '',
+        allowMultiple: question.type === 'multiple',
         answers: this.store
           .options()
-          .filter((o) => o.question_id === q.id)
-          .map((o) => ({ id: String(o.id), text: o.text ?? '' })),
+          .filter((option) => option.question_id === question.id)
+          .map((option) => ({ id: String(option.id), text: option.text ?? '' })),
       }));
 
     return {
       id: String(row.id),
       title: row.name ?? 'Untitled survey',
       description: row.description ?? '',
-      // No category column yet — placeholder until one exists.
       category: 'General',
       endsOn: row.end_date ?? '',
       status: isPast(row.end_date) ? 'completed' : 'published',
