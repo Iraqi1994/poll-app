@@ -21,6 +21,7 @@ describe('YourSurvey', () => {
       created_at: '2026-09-02T14:05:09Z',
       name: 'Favorite Programming Language 2026',
       description: 'Which language do you reach for first?',
+      category: 'Technology & Innovation',
       end_date: '2026-12-31',
     });
     await fixture.whenStable();
@@ -38,6 +39,12 @@ describe('YourSurvey', () => {
   it('shows the survey name', () => {
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
       'Favorite Programming Language 2026',
+    );
+  });
+
+  it('shows the survey category', () => {
+    expect((fixture.nativeElement as HTMLElement).querySelector('.survey__category')?.textContent).toContain(
+      'Technology & Innovation',
     );
   });
 });

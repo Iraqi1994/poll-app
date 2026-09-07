@@ -34,7 +34,7 @@ export class SurveyView {
       id: String(row.id),
       title: row.name ?? 'Untitled survey',
       description: row.description ?? '',
-      category: 'General',
+      category: row.category ?? 'Uncategorized',
       endsOn: row.end_date ?? '',
       status: isPast(row.end_date) ? 'completed' : 'published',
       questions: this.getQuestions(row.id),

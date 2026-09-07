@@ -19,10 +19,38 @@ describe('YourSurveys', () => {
 
     const db = TestBed.inject(Supabase) as unknown as FakeSupabase;
     db.surveys = [
-      { id: 3, created_at: '', name: 'Later', description: null, end_date: '2099-12-31' },
-      { id: 4, created_at: '', name: 'Open ended', description: null, end_date: null },
-      { id: 5, created_at: '', name: 'Sooner', description: null, end_date: '2099-01-31' },
-      { id: 6, created_at: '', name: 'Already over', description: null, end_date: '2020-01-01' },
+      {
+        id: 3,
+        created_at: '',
+        name: 'Later',
+        description: null,
+        category: 'Team Activities',
+        end_date: '2099-12-31',
+      },
+      {
+        id: 4,
+        created_at: '',
+        name: 'Open ended',
+        description: null,
+        category: 'Team Activities',
+        end_date: null,
+      },
+      {
+        id: 5,
+        created_at: '',
+        name: 'Sooner',
+        description: null,
+        category: 'Team Activities',
+        end_date: '2099-01-31',
+      },
+      {
+        id: 6,
+        created_at: '',
+        name: 'Already over',
+        description: null,
+        category: 'Team Activities',
+        end_date: '2020-01-01',
+      },
     ];
     await TestBed.inject(SurveyStore).refresh();
 
