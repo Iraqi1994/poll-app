@@ -4,7 +4,7 @@ import { SurveyRow } from './surveyRow';
 import { VoteRow } from './voteRow';
 
 export interface CacheShape {
-  version: 1;
+  version: 2;
   savedAt: number;
   surveys: SurveyRow[];
   questions: QuestionRow[];

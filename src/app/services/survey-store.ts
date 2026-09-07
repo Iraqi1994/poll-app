@@ -8,7 +8,7 @@ import { VoteRow } from '../interfaces/voteRow';
 import { CacheShape } from '../interfaces/cacheShape';
 import { isPast } from '../utils/dates';
 
-const CACHE_KEY = 'survey-store/v1';
+const CACHE_KEY = 'survey-store/v2';
 
 /**
  * Central owner of every dataset read from Supabase. Components read its signals instead of
@@ -49,7 +49,7 @@ export class SurveyStore {
 
     effect(() => {
       const snapshot: CacheShape = {
-        version: 1,
+        version: 2,
         savedAt: Date.now(),
         surveys: this._surveys(),
         questions: this._questions(),
@@ -93,7 +93,7 @@ export class SurveyStore {
 
   private loadFromCache(): void {
     const cached = this.storage.get<CacheShape>(CACHE_KEY);
-    if (!cached || cached.version !== 1) {
+    if (!cached || cached.version !== 2) {
       return;
     }
     this._surveys.set(cached.surveys ?? []);

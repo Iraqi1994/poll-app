@@ -1,6 +1,6 @@
 <div class="survey" [routerLink]="['/survey', survey().id]">
   <div class="survey__header">
-    <p class="survey__category">Category</p>
+    <p class="survey__category">{{ survey().category ?? 'Uncategorized' }}</p>
     <span class="survey__title">{{ survey().name ?? 'Untitled Survey' }}</span>
   </div>
   <span class="survey__ends">
