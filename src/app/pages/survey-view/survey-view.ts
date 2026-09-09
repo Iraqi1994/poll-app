@@ -7,6 +7,7 @@ import {
   SurveyQuestion,
   SurveyResults as SurveyResultsMap,
 } from '../../models/survey';
+import { VoteRow } from '../../interfaces/voteRow';
 import { SurveyQuestionView } from '../../components/survey-question-view/survey-question-view';
 import { SurveyResults } from '../../components/survey-results/survey-results';
 import { SurveyStore } from '../../services/survey-store';
@@ -41,8 +42,10 @@ export class SurveyView {
     };
   });
 
-  // Votes are wired in the next step; an empty map renders every results bar at 0%.
-  readonly results = computed<SurveyResultsMap>(() => ({}));
+  readonly results = computed<SurveyResultsMap>(() => {
+    const row = this.getRow();
+    return row ? this.getResults(row.id) : {};
+  });
 
   getRow() {
     const id = this.id();
@@ -67,5 +70,44 @@ export class SurveyView {
       .options()
       .filter((option) => option.question_id === questionId)
       .map((option) => ({ id: String(option.id), text: option.text ?? '' }));
+  }
+
+  getResults(surveyId: number): SurveyResultsMap {
+    const votes = this.store.votes().filter((vote) => vote.survey_id === surveyId);
+    const votesPerQuestion = this.countVotesBy(votes, (vote) => vote.question_id);
+    const votesPerOption = this.countVotesBy(votes, (vote) => vote.option_id);
+
+    return this.toPercentages(votesPerOption, votesPerQuestion);
+  }
+
+  countVotesBy(votes: VoteRow[], keyOf: (vote: VoteRow) => number): Map<number, number> {
+    const counts = new Map<number, number>();
+
+    for (const vote of votes) {
+      const key = keyOf(vote);
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    return counts;
+  }
+
+  toPercentages(
+    votesPerOption: Map<number, number>,
+    votesPerQuestion: Map<number, number>,
+  ): SurveyResultsMap {
+    const results: SurveyResultsMap = {};
+
+    for (const option of this.store.options()) {
+      const total = votesPerQuestion.get(option.question_id ?? -1) ?? 0;
+      if (total === 0) continue;
+
+      results[String(option.id)] = this.toPercent(votesPerOption.get(option.id) ?? 0, total);
+    }
+
+    return results;
+  }
+
+  toPercent(count: number, total: number): number {
+    return Math.round((count / total) * 100);
   }
 }

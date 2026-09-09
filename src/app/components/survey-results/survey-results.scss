@@ -29,18 +29,18 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 6px;
-  font-size: 12px;
+  margin-bottom: 10px;
+  font-size: 13px;
 }
 
 .bar-letter {
   font-weight: 700;
-  min-width: 12px;
+  min-width: 14px;
 }
 
 .bar-track {
   flex: 1;
-  height: 10px;
+  height: 12px;
   background-color: #ece7f0;
   border-radius: 999px;
   overflow: hidden;
@@ -56,5 +56,6 @@
 .bar-percent {
   min-width: 34px;
   text-align: right;
-  color: #7a6f80;
+  font-weight: 700;
+  color: #ee9236;
 }
