@@ -23,19 +23,53 @@
   align-items: flex-start;
   gap: 8px;
   font-size: 14px;
+  padding: 4px 8px;
+  margin: 0 -8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #fee9d4;
+  }
 }
 
 .answer-checkbox {
   appearance: none;
+  position: relative;
   width: 14px;
   height: 14px;
   margin-top: 2px;
-  border: 1px solid #35273a;
+  border: 1.5px solid #c9c0cc;
   border-radius: 3px;
   flex-shrink: 0;
+  cursor: pointer;
+
+  &:checked {
+    background-color: #ee9236;
+    border-color: #ee9236;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 4px;
+      height: 7px;
+      border: solid #35273a;
+      border-width: 0 1.5px 1.5px 0;
+      transform: rotate(45deg);
+    }
+  }
 }
 
 .answer-letter {
   font-weight: 700;
   min-width: 16px;
+}
+
+.answer-checkbox:checked ~ .answer-letter,
+.answer-checkbox:checked ~ .answer-text {
+  font-weight: 700;
+  color: #35273a;
 }

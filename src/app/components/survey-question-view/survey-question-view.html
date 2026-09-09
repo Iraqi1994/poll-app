@@ -6,7 +6,7 @@
 
   @for (answer of question().answers; track answer.id) {
     <label class="answer-row">
-      <input type="checkbox" class="answer-checkbox" disabled />
+      <input type="checkbox" class="answer-checkbox" />
       <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
       <span class="answer-text">{{ answer.text }}</span>
     </label>
