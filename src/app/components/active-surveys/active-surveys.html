@@ -1,7 +1,32 @@
 <section class="active-surveys">
-  @if (loading() && surveys().length === 0) {
+  <div class="active-surveys__toolbar">
+    <div class="active-surveys__tabs" role="group" aria-label="Filter surveys by status">
+      <button
+        type="button"
+        class="active-surveys__tab"
+        [class.active-surveys__tab--selected]="tab() === 'active'"
+        [attr.aria-pressed]="tab() === 'active'"
+        (click)="selectTab('active')"
+      >
+        Active survey
+      </button>
+      <button
+        type="button"
+        class="active-surveys__tab"
+        [class.active-surveys__tab--selected]="tab() === 'past'"
+        [attr.aria-pressed]="tab() === 'past'"
+        (click)="selectTab('past')"
+      >
+        Past survey
+      </button>
+    </div>
+
+    <app-category-filter [selected]="category()" (selectedChange)="selectCategory($event)" />
+  </div>
+
+  @if (loading() && noData()) {
     <p class="active-surveys__status">Loading surveys…</p>
-  } @else if (error() && surveys().length === 0) {
+  } @else if (error() && noData()) {
     <p class="active-surveys__status">Couldn't load surveys. {{ error() }}</p>
   }
   <div class="active-surveys__surveys">

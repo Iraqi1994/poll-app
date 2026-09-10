@@ -1,0 +1,30 @@
+<div class="category-filter">
+  <button
+    type="button"
+    class="category-filter__trigger"
+    [class.category-filter__trigger--open]="open()"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="open()"
+    (click)="toggle()"
+  >
+    <span>{{ label() }}</span>
+    <span class="category-filter__caret" [class.category-filter__caret--open]="open()"></span>
+  </button>
+
+  @if (open()) {
+    <ul class="category-filter__panel" role="listbox" aria-label="Sort by categories">
+      @for (category of categories; track category) {
+        <li role="option" [attr.aria-selected]="category === selected()">
+          <button
+            type="button"
+            class="category-filter__option"
+            [class.category-filter__option--selected]="category === selected()"
+            (click)="select(category)"
+          >
+            {{ category }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

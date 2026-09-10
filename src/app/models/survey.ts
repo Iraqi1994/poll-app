@@ -33,3 +33,5 @@ export const SURVEY_CATEGORIES = [
 ] as const;
 
 export type SurveyCategory = (typeof SURVEY_CATEGORIES)[number];
+
+export const ALL_SURVEYS = SURVEY_CATEGORIES[0];
