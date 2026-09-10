@@ -4,7 +4,51 @@
   margin-top: clamp(32px, 2.6vw, 50px);
   margin-bottom: 32px;
 
-  &__status {
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  &__tabs {
+    display: inline-flex;
+    gap: 8px;
+  }
+
+  &__tab {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 999px;
+    background-color: #fefdff;
+    color: #221227;
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #ffcfa1;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #ee9236;
+      outline-offset: 2px;
+    }
+
+    &--selected {
+      background-color: #ffcfa1;
+
+      &:hover {
+        background-color: #ffb770;
+      }
+    }
+  }
+
+  &__status,
+  &__empty {
     color: #fee9d4;
     font-family: 'Mulish', sans-serif;
     font-size: 14px;
@@ -41,5 +85,20 @@
     height: auto;
     max-height: 500px;
     padding-right: 8px;
+  }
+
+  .active-surveys__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .active-surveys__tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .active-surveys__tab {
+    padding: 9px 12px;
   }
 }
