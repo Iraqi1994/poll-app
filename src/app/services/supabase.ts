@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import {
+  createClient,
+  RealtimeChannel,
+  REALTIME_SUBSCRIBE_STATES,
+  SupabaseClient,
+} from '@supabase/supabase-js';
 import { SurveyRow } from '../interfaces/surveyRow';
 import { QuestionRow } from '../interfaces/questionRow';
 import { OptionRow } from '../interfaces/optionRow';
@@ -64,5 +69,29 @@ export class Supabase {
     }
 
     return data ?? [];
+  }
+
+  onVotesChanged(onChange: () => void, onResync: () => void): () => void {
+    const channel = this.createVotesChannel(onChange);
+    this.subscribeWithResync(channel, onResync);
+
+    return () => void this.client.removeChannel(channel);
+  }
+
+  createVotesChannel(onChange: () => void): RealtimeChannel {
+    return this.client
+      .channel('votes-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, () => onChange());
+  }
+
+  subscribeWithResync(channel: RealtimeChannel, onResync: () => void): void {
+    channel.subscribe((status, error) => {
+      if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+        onResync();
+        return;
+      }
+
+      console.warn(`votes channel: ${status}`, error);
+    });
   }
 }
