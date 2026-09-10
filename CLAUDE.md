@@ -25,6 +25,7 @@ Angular 21 single-page app. Supabase is named as the intended backend in the REA
 
 - **Standalone components only** — no `NgModule`. Each component declares its own `imports` array.
 - **New Angular naming style**: class names have no `Component` suffix and files have no `.component` segment (`app.ts` → `App`, `home.ts` → `Home`, `question.ts` → `Question`). Keep this pattern for new components.
+- **`Async` suffix on async functions**: every method that returns a promise ends in `Async` (`getVotesAsync()`, `refreshVotesAsync()`, `refreshAsync()`), so a call site shows that the result must be awaited without opening the definition. This applies to a method typed `Promise<T>` even when it is not declared `async`.
 - **Zoneless**: there is no `zone.js` dependency and no `polyfills` entry in `angular.json`. Do not rely on Zone-based change detection — use signals and `input()`/`output()`.
 - Templates and styles are always separate files (`templateUrl` / `styleUrl`), SCSS, generated with `ng generate component`.
 - TypeScript is in full strict mode plus `noPropertyAccessFromIndexSignature`, `noImplicitOverride`, `noImplicitReturns`, and `strictTemplates`.
