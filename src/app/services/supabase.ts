@@ -9,6 +9,7 @@ import { SurveyRow } from '../interfaces/surveyRow';
 import { QuestionRow } from '../interfaces/questionRow';
 import { OptionRow } from '../interfaces/optionRow';
 import { VoteRow } from '../interfaces/voteRow';
+import { NewVote } from '../interfaces/newVote';
 
 const SUPABASE_URL = 'https://epaxyugtxwvxvyqsinho.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_2I3zgxrFS431KFoytAJ9cA_UZjo8lSU';
@@ -69,6 +70,27 @@ export class Supabase {
     }
 
     return data ?? [];
+  }
+
+  async insertVotesAsync(votes: NewVote[]): Promise<void> {
+    const { error } = await this.client.from('votes').insert(votes);
+
+    if (error) {
+      throw error;
+    }
+  }
+
+  async hasVotedAsync(surveyId: number, voterId: string): Promise<boolean> {
+    const { data, error } = await this.client.rpc('has_voted', {
+      p_survey_id: surveyId,
+      p_voter_id: voterId,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data === true;
   }
 
   onVotesChanged(onChange: () => void, onResync: () => void): () => void {

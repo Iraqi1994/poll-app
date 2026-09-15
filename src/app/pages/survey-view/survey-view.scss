@@ -104,7 +104,16 @@
   &__footer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
     margin-top: 28px;
+  }
+
+  &__error {
+    font-family: 'Mulish', sans-serif;
+    font-size: 13px;
+    color: #c0392b;
+    margin: 0 auto 0 0;
   }
 }
 
@@ -122,6 +131,16 @@
 
   &:hover {
     background-color: #ffb97a;
+  }
+
+  &:disabled {
+    background-color: #efe6e9;
+    color: #9a8fa0;
+    cursor: default;
+  }
+
+  &:disabled:hover {
+    background-color: #efe6e9;
   }
 }
 
