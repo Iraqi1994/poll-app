@@ -20,12 +20,28 @@
 
       <div class="survey-card__questions">
         @for (question of survey.questions; track question.id) {
-          <app-survey-question-view [question]="question" [index]="$index + 1" />
+          <app-survey-question-view
+            [question]="question"
+            [index]="$index + 1"
+            [selectedIds]="selectedFor(question.id)"
+            [disabled]="locked()"
+            (answerToggled)="onAnswerToggled(question, $event)"
+          />
         }
       </div>
 
       <div class="survey-card__footer">
-        <button type="button" class="complete-btn">Complete survey</button>
+        @if (voteError(); as message) {
+          <p class="survey-card__error">{{ message }}</p>
+        }
+        <button
+          type="button"
+          class="complete-btn"
+          [disabled]="!canSubmit()"
+          (click)="onCompleteAsync()"
+        >
+          {{ completeLabel() }}
+        </button>
       </div>
     </section>
 

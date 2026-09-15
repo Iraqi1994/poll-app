@@ -73,3 +73,15 @@
   font-weight: 700;
   color: #35273a;
 }
+
+.answer-checkbox:disabled {
+  cursor: default;
+}
+
+.answer-row:has(.answer-checkbox:disabled) {
+  cursor: default;
+
+  &:hover {
+    background-color: transparent;
+  }
+}

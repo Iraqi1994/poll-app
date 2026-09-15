@@ -6,7 +6,13 @@
 
   @for (answer of question().answers; track answer.id) {
     <label class="answer-row">
-      <input type="checkbox" class="answer-checkbox" />
+      <input
+        type="checkbox"
+        class="answer-checkbox"
+        [checked]="isSelected(answer.id)"
+        [disabled]="disabled()"
+        (change)="answerToggled.emit(answer.id)"
+      />
       <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
       <span class="answer-text">{{ answer.text }}</span>
     </label>
