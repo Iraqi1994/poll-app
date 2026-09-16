@@ -1,7 +1,12 @@
 <div class="question-block" [formGroup]="questionGroup()">
   <div class="question-header">
-    <p class="question-label">{{ questionIndex() }}. Question</p>
-    <app-delete-button label="Remove question {{ questionIndex() }}" (pressed)="remove.emit()" />
+    <div class="label-row">
+      <p class="question-label">{{ questionIndex() }}. Question</p>
+      @if (required() && !text.valid && text.touched) {
+        <span class="field-error">Question text is required.</span>
+      }
+    </div>
+    <app-delete-button label="Remove question {{ questionIndex() }}" (pressed)="onRemove()" />
   </div>
 
   <div class="field-row">
@@ -25,13 +30,18 @@
   </div>
 
   @for (control of answerControls; track $index) {
-    <div class="answer-row">
-      <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
-      <input type="text" class="answer-input" [formControl]="control" />
-      <app-delete-button
-        label="Remove answer {{ getAnswerLabel($index) }}"
-        (pressed)="removeAnswer($index)"
-      />
+    <div class="answer-field">
+      <div class="answer-row">
+        <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
+        <input type="text" class="answer-input" [formControl]="control" />
+        <app-delete-button
+          label="Remove answer {{ getAnswerLabel($index) }}"
+          (pressed)="removeAnswer($index)"
+        />
+      </div>
+      @if ($index < 2 && !control.valid && control.touched) {
+        <span class="field-error">Answer {{ getAnswerLabel($index) }} is required.</span>
+      }
     </div>
   }
 

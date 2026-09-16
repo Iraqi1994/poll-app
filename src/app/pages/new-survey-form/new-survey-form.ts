@@ -53,7 +53,10 @@ export class NewSurveyForm {
         required ? [Validators.required, Validators.maxLength(150)] : [Validators.maxLength(150)],
       ),
       allowMultiple: new FormControl(false),
-      answers: new FormArray([new FormControl(''), new FormControl('')]),
+      answers: new FormArray([
+        new FormControl('', Validators.required),
+        new FormControl('', Validators.required),
+      ]),
     });
   }
 
@@ -62,7 +65,7 @@ export class NewSurveyForm {
   }
 
   removeQuestion(index: number): void {
-    if (this.questions.length <= 1) {
+    if (index === 0) {
       return;
     }
     this.questions.removeAt(index);

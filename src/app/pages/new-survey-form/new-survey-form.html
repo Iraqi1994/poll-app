@@ -53,6 +53,7 @@
         <app-question
           [questionGroup]="question"
           [questionIndex]="$index + 1"
+          [required]="$index === 0"
           (remove)="removeQuestion($index)"
         />
       }
