@@ -1,5 +1,12 @@
 import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { CategorySelect } from '../../components/category-select/category-select';
@@ -14,6 +21,8 @@ import { SurveyCategory } from '../../models/survey';
   styleUrl: './new-survey-form.scss',
 })
 export class NewSurveyForm {
+  today: string = new Date().toISOString().split('T')[0];
+
   surveyForm = new FormGroup({
     name: new FormControl('', { validators: [Validators.required, Validators.minLength(3)] }),
     description: new FormControl('', { validators: [Validators.maxLength(200)] }),
@@ -24,6 +33,10 @@ export class NewSurveyForm {
     }),
     questions: new FormArray([this.createQuestion(true)]),
   });
+
+  get name() {
+    return this.surveyForm.get('name') as FormControl;
+  }
 
   get questions(): FormArray {
     return this.surveyForm.get('questions') as FormArray;

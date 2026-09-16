@@ -13,7 +13,14 @@
   <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublish()">
     <div class="survey-meta">
       <div class="survey-meta__left">
-        <label for="name">Survey name</label>
+        <div class="label-row">
+          <label for="name">Survey name</label>
+          @if (!name.valid && name.touched) {
+            <span class="field-error"
+              >Survey name is required and needs at least 3 characters.</span
+            >
+          }
+        </div>
         <div class="field-row">
           <input type="text" id="name" formControlName="name" />
           <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
@@ -23,7 +30,7 @@
           <div class="meta-row__col">
             <label for="endDate">Set end date (optional)</label>
             <div class="field-row">
-              <input type="date" id="endDate" formControlName="endDate" />
+              <input type="date" id="endDate" [min]="today" formControlName="endDate" />
               <app-delete-button label="Clear end date" (pressed)="clearField('endDate')" />
             </div>
           </div>
