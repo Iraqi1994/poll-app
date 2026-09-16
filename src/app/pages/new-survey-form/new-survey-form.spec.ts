@@ -52,4 +52,22 @@ describe('NewSurveyForm', () => {
   it('renders the category dropdown', () => {
     expect(fixture.nativeElement.querySelector('app-category-select')).not.toBeNull();
   });
+
+  it('never removes the first question, even with multiple questions present', () => {
+    component.addQuestion();
+    component.addQuestion();
+
+    component.removeQuestion(0);
+
+    expect(component.questions.length).toBe(3);
+  });
+
+  it('keeps an added question optional while its answers stay required', () => {
+    component.addQuestion();
+    const added = component.questionGroups[1];
+
+    expect(added.get('text')?.hasError('required')).toBe(false);
+    expect(added.get('answers')?.get('0')?.hasError('required')).toBe(true);
+    expect(added.get('answers')?.get('1')?.hasError('required')).toBe(true);
+  });
 });

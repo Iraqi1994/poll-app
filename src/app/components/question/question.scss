@@ -10,6 +10,25 @@
   justify-content: space-between;
 }
 
+.label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field-error {
+  font-family: 'Mulish', sans-serif;
+  font-size: 13px;
+  color: #ff8a8a;
+}
+
+.answer-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .question-label {
   font-family: 'Mulish', sans-serif;
   font-weight: 700;

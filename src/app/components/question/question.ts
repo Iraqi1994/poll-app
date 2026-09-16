@@ -12,7 +12,12 @@ import { DeleteButton } from '../delete-button/delete-button';
 export class Question {
   questionGroup = input.required<FormGroup>();
   questionIndex = input<number>(1);
+  required = input<boolean>(false);
   remove = output<void>();
+
+  get text(): FormControl {
+    return this.questionGroup().get('text') as FormControl;
+  }
 
   get answers(): FormArray {
     return this.questionGroup().get('answers') as FormArray;
@@ -39,9 +44,18 @@ export class Question {
   }
 
   removeAnswer(index: number): void {
-    if (this.answers.length <= 2) {
+    if (index < 2) {
+      this.answerControls[index]?.markAsTouched();
       return;
     }
     this.answers.removeAt(index);
+  }
+
+  onRemove(): void {
+    if (this.required()) {
+      this.text.markAsTouched();
+      return;
+    }
+    this.remove.emit();
   }
 }
