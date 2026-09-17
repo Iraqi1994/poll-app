@@ -33,44 +33,9 @@ p {
   flex-shrink: 0;
 }
 
-button {
-  width: 138px;
-  height: 48px;
-  border-radius: 10px;
-  border: none;
-  background-color: #ffcfa1;
+app-new-survey-button {
+  display: block;
   margin-top: 20px;
-  font-weight: 600;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  transition:
-    width 0.3s ease,
-    background-color 0.3s ease;
-
-  .btn-icon {
-    width: 0;
-    height: 20px;
-    overflow: hidden;
-    flex-shrink: 0;
-    margin-left: 0;
-    transition:
-      width 0.3s ease,
-      margin-left 0.3s ease;
-  }
-
-  &:hover {
-    cursor: pointer;
-    width: 174px;
-    background-color: #ffb770;
-
-    .btn-icon {
-      width: 20px;
-      margin-left: 8px;
-    }
-  }
 }
 
 @media (max-width: 767px) {
@@ -97,7 +62,7 @@ button {
     order: 3;
   }
 
-  button {
+  app-new-survey-button {
     order: 4;
   }
 }

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { NewSurveyButton } from '../new-survey-button/new-survey-button';
 
 @Component({
   selector: 'app-atf',
-  imports: [RouterLink],
+  imports: [NewSurveyButton],
   templateUrl: './atf.html',
   styleUrl: './atf.scss',
 })
