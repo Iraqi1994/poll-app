@@ -8,9 +8,7 @@
   &__trigger {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
-    width: 100%;
     padding: 0;
     border: none;
     background: transparent;
@@ -93,10 +91,12 @@
   }
 
   &__selected {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 8px;
     color: #ffb770;
     font-family: 'Mulish', sans-serif;
     font-weight: 700;
