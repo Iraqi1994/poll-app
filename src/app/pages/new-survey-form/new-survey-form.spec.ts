@@ -89,6 +89,42 @@ describe('NewSurveyForm', () => {
     expect(component.questions.length).toBe(3);
   });
 
+  it('removes the clicked question and renumbers the rest', async () => {
+    const addButton: HTMLButtonElement = fixture.nativeElement.querySelector('.add-question-btn');
+    addButton.click();
+    addButton.click();
+    addButton.click();
+    await fixture.whenStable();
+
+    const questionInputs = (): HTMLInputElement[] =>
+      Array.from(fixture.nativeElement.querySelectorAll('app-question .question-input'));
+
+    questionInputs().forEach((input, index) => {
+      input.value = `Q${index + 1}`;
+      input.dispatchEvent(new Event('input'));
+    });
+    await fixture.whenStable();
+
+    const deleteButtons: HTMLButtonElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        'app-question .question-header app-delete-button button',
+      ),
+    );
+    deleteButtons[1].click();
+    await fixture.whenStable();
+
+    expect(questionInputs().map((input) => input.value)).toEqual(['Q1', 'Q3', 'Q4']);
+
+    const labels: HTMLElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('app-question .question-label'),
+    );
+    expect(labels.map((label) => label.textContent?.trim())).toEqual([
+      '1. Question',
+      '2. Question',
+      '3. Question',
+    ]);
+  });
+
   it('requires the text and both answers of an added question', () => {
     component.addQuestion();
     const added = component.questionGroups[1];
