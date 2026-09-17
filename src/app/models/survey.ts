@@ -35,3 +35,5 @@ export const SURVEY_CATEGORIES = [
 export type SurveyCategory = (typeof SURVEY_CATEGORIES)[number];
 
 export const ALL_SURVEYS = SURVEY_CATEGORIES[0];
+
+export const SELECTABLE_CATEGORIES = SURVEY_CATEGORIES.slice(1);

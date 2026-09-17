@@ -6,3 +6,8 @@ export interface SurveyRow {
   category: string | null;
   end_date: string | null;
 }
+
+export interface NewSurvey extends Omit<SurveyRow, 'id' | 'created_at' | 'name' | 'category'> {
+  name: string;
+  category: string;
+}
