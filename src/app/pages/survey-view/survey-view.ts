@@ -11,6 +11,7 @@ import { VoteRow } from '../../interfaces/voteRow';
 import { SelectedAnswer } from '../../interfaces/selectedAnswer';
 import { SurveyQuestionView } from '../../components/survey-question-view/survey-question-view';
 import { SurveyResults } from '../../components/survey-results/survey-results';
+import { NewSurveyButton } from '../../components/new-survey-button/new-survey-button';
 import { SurveyStore } from '../../services/survey-store';
 import { Voting } from '../../services/voting';
 import { Voter } from '../../services/voter';
@@ -18,7 +19,7 @@ import { isPast } from '../../utils/dates';
 
 @Component({
   selector: 'app-survey-view',
-  imports: [RouterLink, DatePipe, SurveyQuestionView, SurveyResults],
+  imports: [RouterLink, DatePipe, SurveyQuestionView, SurveyResults, NewSurveyButton],
   templateUrl: './survey-view.html',
   styleUrl: './survey-view.scss',
 })
