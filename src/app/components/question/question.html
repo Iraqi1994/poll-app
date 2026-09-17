@@ -3,7 +3,7 @@
     <div class="label-row">
       <p class="question-label">{{ questionIndex() }}. Question</p>
       @if (required() && !text.valid && text.touched) {
-        <span class="field-error">Question text is required.</span>
+        <span class="field-error">The first question is required.</span>
       }
     </div>
     <app-delete-button label="Remove question {{ questionIndex() }}" (pressed)="onRemove()" />
