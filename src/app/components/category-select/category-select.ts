@@ -34,10 +34,17 @@ export class CategorySelect {
     if (this.disabled) {
       return;
     }
-    this.open.update((isOpen) => !isOpen);
+    if (this.open()) {
+      this.close();
+    } else {
+      this.open.set(true);
+    }
   }
 
   close(): void {
+    if (this.open()) {
+      this.categoryControl().markAsTouched();
+    }
     this.open.set(false);
   }
 

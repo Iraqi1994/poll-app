@@ -35,5 +35,7 @@
       <span>{{ value }}</span>
       <app-delete-button label="Clear selected category" (pressed)="clear()" />
     </div>
+  } @else if (!categoryControl().valid && categoryControl().touched) {
+    <span class="category-select__selected field-error">Category is required.</span>
   }
 </div>
