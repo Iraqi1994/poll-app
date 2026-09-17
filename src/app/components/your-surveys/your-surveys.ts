@@ -14,16 +14,17 @@ export class YourSurveys {
   readonly loading = this.store.loading;
   readonly error = this.store.error;
 
-  /** Still-open surveys, soonest deadline first. Open-ended ones sort last. */
   readonly endingSoon = computed(() =>
-    [...this.store.activeSurveys()].sort((a, b) => {
-      if (!a.end_date) {
-        return b.end_date ? 1 : 0;
-      }
-      if (!b.end_date) {
-        return -1;
-      }
-      return a.end_date.localeCompare(b.end_date);
-    }),
+    [...this.store.activeSurveys()]
+      .sort((a, b) => {
+        if (!a.end_date) {
+          return b.end_date ? 1 : 0;
+        }
+        if (!b.end_date) {
+          return -1;
+        }
+        return a.end_date.localeCompare(b.end_date);
+      })
+      .slice(0, 4),
   );
 }
