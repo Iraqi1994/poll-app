@@ -1,22 +1,49 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormArray, FormControl } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 
+import { SurveyDraft } from '../../interfaces/surveyDraft';
+import { Publishing } from '../../services/publishing';
 import { NewSurveyForm } from './new-survey-form';
 
 describe('NewSurveyForm', () => {
   let component: NewSurveyForm;
   let fixture: ComponentFixture<NewSurveyForm>;
+  let published: SurveyDraft[];
 
   beforeEach(async () => {
+    published = [];
+
     await TestBed.configureTestingModule({
       imports: [NewSurveyForm],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        {
+          provide: Publishing,
+          useValue: {
+            publishSurveyAsync: (draft: SurveyDraft) => {
+              published.push(draft);
+              return Promise.resolve(1);
+            },
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NewSurveyForm);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
+
+  function fillValidSurvey(): void {
+    component.surveyForm.get('name')?.setValue('My survey');
+    component.surveyForm.get('category')?.setValue('Team Activities');
+
+    const question = component.questionGroups[0];
+    question.get('text')?.setValue('Favourite colour?');
+    question.get('answers')?.get('0')?.setValue('Red');
+    question.get('answers')?.get('1')?.setValue('Blue');
+  }
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -62,12 +89,55 @@ describe('NewSurveyForm', () => {
     expect(component.questions.length).toBe(3);
   });
 
-  it('keeps an added question optional while its answers stay required', () => {
+  it('requires the text and both answers of an added question', () => {
     component.addQuestion();
     const added = component.questionGroups[1];
 
-    expect(added.get('text')?.hasError('required')).toBe(false);
+    expect(added.get('text')?.hasError('required')).toBe(true);
     expect(added.get('answers')?.get('0')?.hasError('required')).toBe(true);
     expect(added.get('answers')?.get('1')?.hasError('required')).toBe(true);
+  });
+
+  it('publishes nothing and marks the form touched when it is invalid', async () => {
+    await component.onPublishAsync();
+
+    expect(published).toEqual([]);
+    expect(component.surveyForm.get('name')?.touched).toBe(true);
+    expect(component.questionGroups[0].get('text')?.touched).toBe(true);
+    expect(component.published()).toBe(false);
+  });
+
+  it('publishes a draft once the form is valid', async () => {
+    fillValidSurvey();
+
+    await component.onPublishAsync();
+
+    expect(published.length).toBe(1);
+    expect(published[0].name).toBe('My survey');
+    expect(published[0].category).toBe('Team Activities');
+    expect(published[0].questions[0].answers).toEqual(['Red', 'Blue']);
+    expect(component.published()).toBe(true);
+  });
+
+  it('maps blank optional meta fields to empty strings in the draft', () => {
+    fillValidSurvey();
+
+    const draft = component.toDraft();
+
+    expect(draft.description).toBe('');
+    expect(draft.endDate).toBe('');
+  });
+
+  it('drops blank extra answers from the draft but keeps A and B', () => {
+    fillValidSurvey();
+
+    const answers = component.questionGroups[0].get('answers') as FormArray;
+    answers.push(new FormControl('Green'));
+    answers.push(new FormControl('   '));
+    answers.push(new FormControl(''));
+
+    const draft = component.toDraft();
+
+    expect(draft.questions[0].answers).toEqual(['Red', 'Blue', 'Green']);
   });
 });

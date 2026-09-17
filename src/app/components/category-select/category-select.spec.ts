@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 
-import { SURVEY_CATEGORIES, SurveyCategory } from '../../models/survey';
+import { ALL_SURVEYS, SELECTABLE_CATEGORIES, SurveyCategory } from '../../models/survey';
 import { CategorySelect } from './category-select';
 
 describe('CategorySelect', () => {
@@ -43,20 +43,26 @@ describe('CategorySelect', () => {
     expect(trigger().textContent?.trim()).toBe('Choose category');
   });
 
-  it('opens the panel with one option per category on trigger click', async () => {
+  it('opens the panel with one option per selectable category on trigger click', async () => {
     expect(options().length).toBe(0);
 
     trigger().click();
     await fixture.whenStable();
 
-    expect(options().length).toBe(SURVEY_CATEGORIES.length);
-    expect(options().some((o) => o.textContent?.trim() === 'All Surveys')).toBe(true);
+    expect(options().length).toBe(SELECTABLE_CATEGORIES.length);
+  });
+
+  it('never offers the "All Surveys" filter sentinel as a category', async () => {
+    trigger().click();
+    await fixture.whenStable();
+
+    expect(options().some((o) => o.textContent?.trim() === ALL_SURVEYS)).toBe(false);
   });
 
   it('writes the picked value into the control and closes on option click', async () => {
     trigger().click();
     await fixture.whenStable();
-    options()[1].click();
+    options()[0].click();
     await fixture.whenStable();
 
     expect(control.value).toBe('Team Activities');
@@ -67,7 +73,7 @@ describe('CategorySelect', () => {
   it('shows the selection with a clear button that resets the control', async () => {
     trigger().click();
     await fixture.whenStable();
-    options()[2].click();
+    options()[1].click();
     await fixture.whenStable();
     expect(selectedRow()?.textContent).toContain('Health & Wellness');
 

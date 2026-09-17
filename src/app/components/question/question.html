@@ -2,8 +2,8 @@
   <div class="question-header">
     <div class="label-row">
       <p class="question-label">{{ questionIndex() }}. Question</p>
-      @if (required() && !text.valid && text.touched) {
-        <span class="field-error">The first question is required.</span>
+      @if (!text.valid && text.touched) {
+        <span class="field-error">{{ textErrorMessage }}</span>
       }
     </div>
     <app-delete-button label="Remove question {{ questionIndex() }}" (pressed)="onRemove()" />

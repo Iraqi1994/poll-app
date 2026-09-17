@@ -62,6 +62,11 @@
   }
 }
 
+.question-input.ng-invalid.ng-touched,
+.answer-input.ng-invalid.ng-touched {
+  border-color: #ff8a8a;
+}
+
 .char-counter {
   align-self: flex-end;
   font-size: 12px;

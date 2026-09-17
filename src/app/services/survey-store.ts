@@ -10,6 +10,7 @@ import { isPast } from '../utils/dates';
 
 const CACHE_KEY = 'survey-store/v2';
 const VOTES_DEBOUNCE_MS = 250;
+const SURVEYS_DEBOUNCE_MS = 250;
 
 /** The four datasets, in the order {@link SurveyStore.fetchAll} returns them. */
 type Datasets = [SurveyRow[], QuestionRow[], OptionRow[], VoteRow[]];
@@ -35,6 +36,8 @@ export class SurveyStore implements OnDestroy {
 
   private stopVotesListener: (() => void) | null = null;
   private votesRefreshTimer: ReturnType<typeof setTimeout> | null = null;
+  private stopSurveysListener: (() => void) | null = null;
+  private surveysRefreshTimer: ReturnType<typeof setTimeout> | null = null;
 
   private readonly _surveys = signal<SurveyRow[]>([]);
   private readonly _questions = signal<QuestionRow[]>([]);
@@ -80,12 +83,17 @@ export class SurveyStore implements OnDestroy {
 
     this.refreshAsync();
     this.listenForVoteChanges();
+    this.listenForSurveyChanges();
   }
 
   ngOnDestroy(): void {
     this.cancelVotesRefresh();
     this.stopVotesListener?.();
     this.stopVotesListener = null;
+
+    this.cancelSurveysRefresh();
+    this.stopSurveysListener?.();
+    this.stopSurveysListener = null;
   }
 
   async refreshAsync(): Promise<void> {
@@ -104,6 +112,22 @@ export class SurveyStore implements OnDestroy {
   async refreshVotesAsync(): Promise<void> {
     try {
       this._votes.set(await this.db.getVotesAsync());
+    } catch (error) {
+      this._error.set(this.toMessage(error));
+    }
+  }
+
+  async refreshSurveysAsync(): Promise<void> {
+    try {
+      const [surveys, questions, options] = await Promise.all([
+        this.db.getSurveysAsync(),
+        this.db.getQuestionsAsync(),
+        this.db.getOptionsAsync(),
+      ]);
+
+      this._surveys.set(surveys);
+      this._questions.set(questions);
+      this._options.set(options);
     } catch (error) {
       this._error.set(this.toMessage(error));
     }
@@ -147,6 +171,30 @@ export class SurveyStore implements OnDestroy {
 
     clearTimeout(this.votesRefreshTimer);
     this.votesRefreshTimer = null;
+  }
+
+  listenForSurveyChanges(): void {
+    this.stopSurveysListener = this.db.onSurveysChanged(
+      () => this.scheduleSurveysRefresh(),
+      () => this.scheduleSurveysRefresh(),
+    );
+  }
+
+  scheduleSurveysRefresh(): void {
+    this.cancelSurveysRefresh();
+    this.surveysRefreshTimer = setTimeout(() => {
+      this.surveysRefreshTimer = null;
+      void this.refreshSurveysAsync();
+    }, SURVEYS_DEBOUNCE_MS);
+  }
+
+  cancelSurveysRefresh(): void {
+    if (this.surveysRefreshTimer === null) {
+      return;
+    }
+
+    clearTimeout(this.surveysRefreshTimer);
+    this.surveysRefreshTimer = null;
   }
 
   toMessage(error: unknown): string {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, input, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { SURVEY_CATEGORIES, SurveyCategory } from '../../models/survey';
+import { SELECTABLE_CATEGORIES, SurveyCategory } from '../../models/survey';
 import { DeleteButton } from '../delete-button/delete-button';
 
 @Component({
@@ -19,11 +19,16 @@ export class CategorySelect {
 
   categoryControl = input.required<FormControl<SurveyCategory | ''>>();
 
-  readonly categories = SURVEY_CATEGORIES;
+  readonly categories = SELECTABLE_CATEGORIES;
   readonly open = signal(false);
 
   get value(): SurveyCategory | '' {
     return this.categoryControl().value;
+  }
+
+  get invalid(): boolean {
+    const control = this.categoryControl();
+    return !control.valid && control.touched;
   }
 
   get disabled(): boolean {

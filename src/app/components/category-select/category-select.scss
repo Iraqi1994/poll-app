@@ -33,6 +33,14 @@
     }
   }
 
+  &__trigger--invalid {
+    color: #ff8a8a;
+
+    .category-select__caret {
+      border-top-color: #ff8a8a;
+    }
+  }
+
   &__caret {
     width: 0;
     height: 0;

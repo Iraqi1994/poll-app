@@ -31,6 +31,10 @@ export class Question {
     return this.questionGroup().get('text')?.value?.length ?? 0;
   }
 
+  get textErrorMessage(): string {
+    return this.required() ? 'The first question is required.' : 'Question text is required.';
+  }
+
   getAnswerLabel(index: number): string {
     return String.fromCharCode(65 + index);
   }

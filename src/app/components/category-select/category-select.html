@@ -2,6 +2,7 @@
   <button
     type="button"
     class="category-select__trigger"
+    [class.category-select__trigger--invalid]="invalid"
     id="category"
     aria-label="Choose category"
     aria-haspopup="listbox"
@@ -35,7 +36,7 @@
       <span>{{ value }}</span>
       <app-delete-button label="Clear selected category" (pressed)="clear()" />
     </div>
-  } @else if (!categoryControl().valid && categoryControl().touched) {
+  } @else if (invalid) {
     <span class="category-select__selected field-error">Category is required.</span>
   }
 </div>

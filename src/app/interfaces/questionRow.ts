@@ -6,3 +6,10 @@ export interface QuestionRow {
   type: string | null;
   order: number | null;
 }
+
+export interface NewQuestion {
+  survey_id: number;
+  text: string;
+  type: string;
+  order: number;
+}

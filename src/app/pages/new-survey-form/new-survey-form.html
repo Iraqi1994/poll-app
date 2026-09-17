@@ -10,7 +10,7 @@
     </a>
   </div>
   <h1>Create new survey</h1>
-  <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublish()">
+  <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublishAsync()">
     <div class="survey-meta">
       <div class="survey-meta__left">
         <div class="label-row">
@@ -65,6 +65,15 @@
     </div>
   </form>
   <div class="form-footer">
-    <button type="submit" form="survey-form" class="publish-btn">Publish</button>
+    @if (publishError()) {
+      <span class="field-error">{{ publishError() }}</span>
+    }
+    @if (published()) {
+      <p class="publish-toast">Your survey is now published</p>
+    } @else {
+      <button type="submit" form="survey-form" class="publish-btn" [disabled]="submitting()">
+        {{ publishLabel() }}
+      </button>
+    }
   </div>
 </section>

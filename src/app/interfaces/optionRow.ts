@@ -6,3 +6,9 @@ export interface OptionRow {
   order: number | null;
   vote_count: number;
 }
+
+export interface NewOption {
+  question_id: number;
+  text: string;
+  order: number;
+}

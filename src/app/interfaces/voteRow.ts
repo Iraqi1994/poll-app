@@ -6,3 +6,5 @@ export interface VoteRow {
   question_id: number;
   option_id: number;
 }
+
+export interface NewVote extends Omit<VoteRow, 'id' | 'created_at'> {}

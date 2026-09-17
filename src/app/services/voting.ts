@@ -3,7 +3,7 @@ import { Supabase } from './supabase';
 import { SurveyStore } from './survey-store';
 import { Voter } from './voter';
 import { LocalStore } from './local-store';
-import { NewVote } from '../interfaces/newVote';
+import { NewVote } from '../interfaces/voteRow';
 import { SelectedAnswer } from '../interfaces/selectedAnswer';
 
 const VOTED_KEY = 'voted-surveys/v1';
