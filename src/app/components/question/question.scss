@@ -24,9 +24,15 @@
 }
 
 .answer-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.answer-error {
+  position: absolute;
+  top: 100%;
+  left: 28px;
+  margin-top: 2px;
 }
 
 .question-label {
