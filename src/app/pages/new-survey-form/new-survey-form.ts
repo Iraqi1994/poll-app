@@ -11,7 +11,6 @@ import { SurveyCategory } from '../../models/survey';
 import { Publishing } from '../../services/publishing';
 
 const REDIRECT_DELAY_MS = 2000;
-const REQUIRED_ANSWER_COUNT = 2;
 
 @Component({
   selector: 'app-new-survey-form',
@@ -131,9 +130,7 @@ export class NewSurveyForm implements OnDestroy {
   }
 
   toAnswers(group: FormGroup): string[] {
-    return (group.get('answers') as FormArray).controls
-      .map((control) => this.trimmed(control))
-      .filter((answer, index) => index < REQUIRED_ANSWER_COUNT || answer.length > 0);
+    return (group.get('answers') as FormArray).controls.map((control) => this.trimmed(control));
   }
 
   trimmed(control: { value: unknown } | null): string {
