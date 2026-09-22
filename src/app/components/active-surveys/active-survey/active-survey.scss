@@ -35,3 +35,20 @@
     background-color: #5c4559;
   }
 }
+
+@media (max-width: 768px) {
+  .survey {
+    &__title {
+      font-size: 18px;
+    }
+
+    &__ends {
+      font-size: 10px;
+      padding: 2px 5px;
+    }
+
+    &__category {
+      font-size: 12px;
+    }
+  }
+}
