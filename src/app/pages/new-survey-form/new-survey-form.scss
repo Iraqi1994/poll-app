@@ -201,6 +201,7 @@ h1 {
 .publish-btn {
   height: 48px;
   min-width: 95px;
+  padding: 0 24px;
   background-color: #ffcfa1;
   color: #221227;
   border: none;
@@ -208,10 +209,33 @@ h1 {
   font-family: 'Nokora', sans-serif;
   font-weight: bold;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition:
+    padding-right 0.3s ease,
+    background-color 0.3s ease;
 
-  &:hover {
+  .btn-icon {
+    width: 0;
+    height: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: 0;
+    transition:
+      width 0.3s ease,
+      margin-left 0.3s ease;
+  }
+
+  &:hover:not(:disabled) {
     background-color: #ffb97a;
+    padding-right: 16px;
+
+    .btn-icon {
+      width: 20px;
+      margin-left: 8px;
+    }
   }
 
   &:disabled {
