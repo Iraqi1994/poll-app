@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormArray, FormControl } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 
 import { SurveyDraft } from '../../interfaces/surveyDraft';
@@ -164,16 +164,34 @@ describe('NewSurveyForm', () => {
     expect(draft.endDate).toBe('');
   });
 
-  it('drops blank extra answers from the draft but keeps A and B', () => {
+  function addAnswerViaUi(): void {
+    const addButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      'app-question .add-answer-btn',
+    );
+    addButton.click();
+  }
+
+  it('blocks publish when an added answer is left blank', async () => {
     fillValidSurvey();
+    addAnswerViaUi();
+    await fixture.whenStable();
 
+    await component.onPublishAsync();
+
+    expect(published).toEqual([]);
     const answers = component.questionGroups[0].get('answers') as FormArray;
-    answers.push(new FormControl('Green'));
-    answers.push(new FormControl('   '));
-    answers.push(new FormControl(''));
+    expect(answers.at(2)?.touched).toBe(true);
+  });
 
-    const draft = component.toDraft();
+  it('publishes an added answer once it is filled in', async () => {
+    fillValidSurvey();
+    addAnswerViaUi();
+    const answers = component.questionGroups[0].get('answers') as FormArray;
+    answers.at(2)?.setValue('Green');
+    await fixture.whenStable();
 
-    expect(draft.questions[0].answers).toEqual(['Red', 'Blue', 'Green']);
+    await component.onPublishAsync();
+
+    expect(published[0].questions[0].answers).toEqual(['Red', 'Blue', 'Green']);
   });
 });

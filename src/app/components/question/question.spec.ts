@@ -45,9 +45,40 @@ describe('Question', () => {
     component.removeAnswer(0);
     expect(component.answers.length).toBe(3);
     expect(component.answerControls[0].touched).toBe(true);
+    expect(component.isNotDeletable(0)).toBe(true);
 
     component.removeAnswer(2);
     expect(component.answers.length).toBe(2);
+    expect(component.isNotDeletable(2)).toBe(false);
+  });
+
+  it('adds a required validator to newly added answers', () => {
+    component.addAnswer();
+
+    const added = component.answerControls[component.answerControls.length - 1];
+    expect(added.hasError('required')).toBe(true);
+  });
+
+  it('shows a cannot-delete message instead of the required message for a blank, touched A', async () => {
+    component.removeAnswer(0);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const errors: HTMLElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('.answer-error'),
+    );
+    expect(errors.length).toBe(1);
+    expect(errors[0].textContent).toContain('Answer A cannot be deleted.');
+  });
+
+  it('shows a required error for answers beyond the first two once touched', async () => {
+    fixture.componentRef.setInput('questionGroup', buildQuestionGroup(3));
+    component.answerControls[2].markAsTouched();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const error: HTMLElement = fixture.nativeElement.querySelector('.answer-error');
+    expect(error.textContent).toContain('Answer C is required.');
   });
 
   it('emits remove when the header icon button is pressed', () => {

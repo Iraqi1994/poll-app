@@ -39,10 +39,8 @@
           (pressed)="removeAnswer($index)"
         />
       </div>
-      @if ($index < 2 && !control.valid && control.touched) {
-        <span class="field-error answer-error"
-          >Answer {{ getAnswerLabel($index) }} is required.</span
-        >
+      @if (answerErrorMessage($index, control); as message) {
+        <span class="field-error answer-error">{{ message }}</span>
       }
     </div>
   }
