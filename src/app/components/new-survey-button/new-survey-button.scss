@@ -1,11 +1,11 @@
 button {
-  height: 48px;
-  padding: 0 24px;
+  height: clamp(38px, 10vw, 48px);
+  padding: 0 clamp(14px, 5vw, 24px);
   border-radius: 10px;
   border: none;
   background-color: #ffcfa1;
   font-weight: 600;
-  font-size: 18px;
+  font-size: clamp(13px, 3.4vw, 18px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,7 +16,7 @@ button {
 
   .btn-icon {
     width: 0;
-    height: 20px;
+    height: clamp(16px, 4vw, 20px);
     overflow: hidden;
     flex-shrink: 0;
     margin-left: 0;
