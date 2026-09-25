@@ -14,30 +14,32 @@ export type SurveyTab = 'active' | 'past';
   styleUrl: './active-surveys.scss',
 })
 export class ActiveSurveys {
-  private readonly store = inject(SurveyStore);
+  store = inject(SurveyStore);
 
-  readonly loading = this.store.loading;
-  readonly error = this.store.error;
+  loading = this.store.loading;
+  error = this.store.error;
 
-  readonly tab = signal<SurveyTab>('active');
-  readonly category = signal<SurveyCategory>(ALL_SURVEYS);
+  tab = signal<SurveyTab>('active');
+  category = signal<SurveyCategory>(ALL_SURVEYS);
 
-  readonly noData = computed(() => this.store.surveys().length === 0);
+  noData = computed(() => this.store.surveys().length === 0);
 
-  private readonly tabSurveys = computed(() =>
+  tabSurveys = computed(() =>
     this.tab() === 'active' ? this.store.activeSurveys() : this.store.pastSurveys(),
   );
 
-  readonly surveys = computed(() =>
+  surveys = computed(() =>
     this.category() === ALL_SURVEYS
       ? this.tabSurveys()
       : this.tabSurveys().filter((survey) => survey.category === this.category()),
   );
 
+  /** Switches the grid between the active and past surveys. */
   selectTab(tab: SurveyTab): void {
     this.tab.set(tab);
   }
 
+  /** Narrows the grid to one category, or to all surveys. */
   selectCategory(category: SurveyCategory): void {
     this.category.set(category);
   }

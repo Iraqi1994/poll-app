@@ -1,0 +1,12 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/app"],
+  "entryPointStrategy": "expand",
+  "exclude": ["**/*.spec.ts"],
+  "tsconfig": "tsconfig.app.json",
+  "out": "docs",
+  "readme": "none",
+  "includeVersion": true,
+  "excludeExternals": true,
+  "intentionallyNotExported": ["Datasets"]
+}

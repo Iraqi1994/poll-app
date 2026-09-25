@@ -59,6 +59,10 @@ export class SurveyStore implements OnDestroy {
   readonly activeSurveys = computed(() => this._surveys().filter((s) => !isPast(s.end_date)));
   readonly pastSurveys = computed(() => this._surveys().filter((s) => isPast(s.end_date)));
 
+  /**
+   * Hydrates from the cache, registers the write-through effect, then kicks off the first
+   * network load and both realtime subscriptions.
+   */
   constructor() {
     this.loadFromCache();
 
@@ -86,6 +90,7 @@ export class SurveyStore implements OnDestroy {
     this.listenForSurveyChanges();
   }
 
+  /** Cancels both pending refetches and tears down both realtime subscriptions. */
   ngOnDestroy(): void {
     this.cancelVotesRefresh();
     this.stopVotesListener?.();
@@ -96,6 +101,10 @@ export class SurveyStore implements OnDestroy {
     this.stopSurveysListener = null;
   }
 
+  /**
+   * Reloads all four datasets, reporting failures through {@link SurveyStore.error} rather than
+   * throwing.
+   */
   async refreshAsync(): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
@@ -109,6 +118,7 @@ export class SurveyStore implements OnDestroy {
     }
   }
 
+  /** Reloads only the votes, which is what a realtime vote event needs. */
   async refreshVotesAsync(): Promise<void> {
     try {
       this._votes.set(await this.db.getVotesAsync());
@@ -117,6 +127,7 @@ export class SurveyStore implements OnDestroy {
     }
   }
 
+  /** Reloads surveys with their questions and options, leaving the votes untouched. */
   async refreshSurveysAsync(): Promise<void> {
     try {
       const [surveys, questions, options] = await Promise.all([
@@ -133,6 +144,7 @@ export class SurveyStore implements OnDestroy {
     }
   }
 
+  /** Fetches all four datasets in parallel. */
   fetchAll(): Promise<Datasets> {
     return Promise.all([
       this.db.getSurveysAsync(),
@@ -142,6 +154,7 @@ export class SurveyStore implements OnDestroy {
     ]);
   }
 
+  /** Writes a fetched set of datasets into the signals. */
   applyAll([surveys, questions, options, votes]: Datasets): void {
     this._surveys.set(surveys);
     this._questions.set(questions);
@@ -149,6 +162,7 @@ export class SurveyStore implements OnDestroy {
     this._votes.set(votes);
   }
 
+  /** Starts the votes subscription, refetching on both changes and reconnects. */
   listenForVoteChanges(): void {
     this.stopVotesListener = this.db.onVotesChanged(
       () => this.scheduleVotesRefresh(),
@@ -156,6 +170,7 @@ export class SurveyStore implements OnDestroy {
     );
   }
 
+  /** Queues a votes refetch, replacing any pending one so bursts collapse into a single call. */
   scheduleVotesRefresh(): void {
     this.cancelVotesRefresh();
     this.votesRefreshTimer = setTimeout(() => {
@@ -164,6 +179,7 @@ export class SurveyStore implements OnDestroy {
     }, VOTES_DEBOUNCE_MS);
   }
 
+  /** Drops any pending votes refetch. */
   cancelVotesRefresh(): void {
     if (this.votesRefreshTimer === null) {
       return;
@@ -173,6 +189,7 @@ export class SurveyStore implements OnDestroy {
     this.votesRefreshTimer = null;
   }
 
+  /** Starts the surveys subscription, refetching on both changes and reconnects. */
   listenForSurveyChanges(): void {
     this.stopSurveysListener = this.db.onSurveysChanged(
       () => this.scheduleSurveysRefresh(),
@@ -180,6 +197,7 @@ export class SurveyStore implements OnDestroy {
     );
   }
 
+  /** Queues a surveys refetch, replacing any pending one so bursts collapse into a single call. */
   scheduleSurveysRefresh(): void {
     this.cancelSurveysRefresh();
     this.surveysRefreshTimer = setTimeout(() => {
@@ -188,6 +206,7 @@ export class SurveyStore implements OnDestroy {
     }, SURVEYS_DEBOUNCE_MS);
   }
 
+  /** Drops any pending surveys refetch. */
   cancelSurveysRefresh(): void {
     if (this.surveysRefreshTimer === null) {
       return;
@@ -197,10 +216,12 @@ export class SurveyStore implements OnDestroy {
     this.surveysRefreshTimer = null;
   }
 
+  /** Reduces a thrown value to a message suitable for {@link SurveyStore.error}. */
   toMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
   }
 
+  /** Hydrates the signals from the cached snapshot, ignoring a missing or outdated one. */
   loadFromCache(): void {
     const cached = this.storage.get<CacheShape>(CACHE_KEY);
     if (!cached || cached.version !== 2) {

@@ -10,25 +10,31 @@ const VOTED_KEY = 'voted-surveys/v1';
 
 @Injectable({ providedIn: 'root' })
 export class Voting {
-  private readonly db = inject(Supabase);
-  private readonly store = inject(SurveyStore);
-  private readonly voter = inject(Voter);
-  private readonly storage = inject(LocalStore);
+  db = inject(Supabase);
+  store = inject(SurveyStore);
+  voter = inject(Voter);
+  storage = inject(LocalStore);
 
-  private readonly _votedSurveyIds = signal<number[]>(this.loadVotedIds());
+  _votedSurveyIds = signal<number[]>(this.loadVotedIds());
 
-  readonly votedSurveyIds = this._votedSurveyIds.asReadonly();
+  votedSurveyIds = this._votedSurveyIds.asReadonly();
 
+  /** Whether this browser has already voted in `surveyId`, according to local state only. */
   hasVoted(surveyId: number): boolean {
     return this._votedSurveyIds().includes(surveyId);
   }
 
+  /** Inserts the selected answers as votes, marks the survey voted, and refreshes the tallies. */
   async castVotesAsync(surveyId: number, selections: SelectedAnswer[]): Promise<void> {
     await this.db.insertVotesAsync(this.toNewVotes(surveyId, selections));
     this.markVoted(surveyId);
     await this.store.refreshVotesAsync();
   }
 
+  /**
+   * Reconciles local state with the backend, so a vote cast on another device still counts as
+   * voted here. Does nothing when this browser already knows it voted.
+   */
   async syncVotedAsync(surveyId: number): Promise<void> {
     if (this.hasVoted(surveyId)) {
       return;
@@ -39,6 +45,7 @@ export class Voting {
     }
   }
 
+  /** Maps the selected answers to vote rows stamped with this browser's voter id. */
   toNewVotes(surveyId: number, selections: SelectedAnswer[]): NewVote[] {
     return selections.map((selection) => ({
       voter_id: this.voter.id,
@@ -48,6 +55,7 @@ export class Voting {
     }));
   }
 
+  /** Records `surveyId` as voted and persists the list, ignoring ids already recorded. */
   markVoted(surveyId: number): void {
     if (this.hasVoted(surveyId)) {
       return;
@@ -57,6 +65,7 @@ export class Voting {
     this.storage.set(VOTED_KEY, this._votedSurveyIds());
   }
 
+  /** Reads the persisted voted-survey ids, falling back to an empty list. */
   loadVotedIds(): number[] {
     return this.storage.get<number[]>(VOTED_KEY) ?? [];
   }

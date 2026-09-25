@@ -10,5 +10,5 @@ import { SurveyRow } from '../../../interfaces/surveyRow';
   styleUrl: './active-survey.scss',
 })
 export class ActiveSurvey {
-  readonly survey = input.required<SurveyRow>();
+  survey = input.required<SurveyRow>();
 }
