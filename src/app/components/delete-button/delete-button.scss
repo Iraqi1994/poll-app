@@ -33,3 +33,10 @@
     outline-offset: 1px;
   }
 }
+
+@media (max-width: 767px) {
+  .delete-button {
+    width: 32px;
+    height: 32px;
+  }
+}
