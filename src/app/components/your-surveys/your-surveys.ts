@@ -9,12 +9,12 @@ import { SurveyStore } from '../../services/survey-store';
   styleUrl: './your-surveys.scss',
 })
 export class YourSurveys {
-  private readonly store = inject(SurveyStore);
+  store = inject(SurveyStore);
 
-  readonly loading = this.store.loading;
-  readonly error = this.store.error;
+  loading = this.store.loading;
+  error = this.store.error;
 
-  readonly endingSoon = computed(() =>
+  endingSoon = computed(() =>
     [...this.store.activeSurveys()]
       .sort((a, b) => {
         if (!a.end_date) {

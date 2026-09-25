@@ -24,20 +24,20 @@ import { isPast } from '../../utils/dates';
   styleUrl: './survey-view.scss',
 })
 export class SurveyView {
-  private readonly store = inject(SurveyStore);
-  private readonly voting = inject(Voting);
-  private readonly voter = inject(Voter);
+  store = inject(SurveyStore);
+  voting = inject(Voting);
+  voter = inject(Voter);
 
   id = input<string>();
 
-  readonly loading = this.store.loading;
-  readonly error = this.store.error;
+  loading = this.store.loading;
+  error = this.store.error;
 
-  readonly selections = signal<Record<string, string[]>>({});
-  readonly submitting = signal(false);
-  readonly voteError = signal<string | null>(null);
+  selections = signal<Record<string, string[]>>({});
+  submitting = signal(false);
+  voteError = signal<string | null>(null);
 
-  readonly survey = computed<Survey | null>(() => {
+  survey = computed<Survey | null>(() => {
     const row = this.getRow();
     if (!row) return null;
 
@@ -52,14 +52,14 @@ export class SurveyView {
     };
   });
 
-  readonly results = computed<SurveyResultsMap>(() => {
+  results = computed<SurveyResultsMap>(() => {
     const row = this.getRow();
     return row ? this.getResults(row.id) : {};
   });
 
-  readonly surveyId = computed(() => this.getRow()?.id ?? null);
+  surveyId = computed(() => this.getRow()?.id ?? null);
 
-  readonly myAnswerIds = computed<string[]>(() => {
+  myAnswerIds = computed<string[]>(() => {
     const surveyId = this.surveyId();
     if (surveyId === null) return [];
 
@@ -69,29 +69,33 @@ export class SurveyView {
       .map((vote) => String(vote.option_id));
   });
 
-  readonly hasVoted = computed(() => {
+  hasVoted = computed(() => {
     const surveyId = this.surveyId();
     const votedLocally = surveyId !== null && this.voting.hasVoted(surveyId);
     return votedLocally || this.myAnswerIds().length > 0;
   });
 
-  readonly closed = computed(() => this.survey()?.status === 'completed');
+  closed = computed(() => this.survey()?.status === 'completed');
 
-  readonly locked = computed(() => this.hasVoted() || this.submitting() || this.closed());
+  locked = computed(() => this.hasVoted() || this.submitting() || this.closed());
 
-  readonly selectedCount = computed(() =>
+  selectedCount = computed(() =>
     Object.values(this.selections()).reduce((total, ids) => total + ids.length, 0),
   );
 
-  readonly canSubmit = computed(() => !this.locked() && this.selectedCount() > 0);
+  canSubmit = computed(() => !this.locked() && this.selectedCount() > 0);
 
-  readonly completeLabel = computed(() => {
+  completeLabel = computed(() => {
     if (this.hasVoted()) return 'Already voted';
     if (this.submitting()) return 'Submitting…';
     if (this.closed()) return 'Survey closed';
     return 'Complete survey';
   });
 
+  /**
+   * Checks with the backend whether this voter already answered, whenever the resolved survey
+   * changes, so a vote cast elsewhere locks the form here too.
+   */
   constructor() {
     effect(() => {
       const surveyId = this.surveyId();
@@ -101,12 +105,14 @@ export class SurveyView {
     });
   }
 
+  /** Finds the survey row matching the route's `id`, or `undefined` while it is not loaded. */
   getRow() {
     const id = this.id();
     const row = this.store.surveys().find((s) => String(s.id) === id);
     return row;
   }
 
+  /** Builds the view models for a survey's questions, each with its answers. */
   getQuestions(surveyId: number): SurveyQuestion[] {
     return this.store
       .questions()
@@ -119,6 +125,7 @@ export class SurveyView {
       }));
   }
 
+  /** Builds the view models for one question's answer options. */
   getAnswers(questionId: number): SurveyAnswer[] {
     return this.store
       .options()
@@ -126,6 +133,7 @@ export class SurveyView {
       .map((option) => ({ id: String(option.id), text: option.text ?? '' }));
   }
 
+  /** Tallies a survey's votes and returns each option's share of its own question. */
   getResults(surveyId: number): SurveyResultsMap {
     const votes = this.store.votes().filter((vote) => vote.survey_id === surveyId);
     const votesPerQuestion = this.countVotesBy(votes, (vote) => vote.question_id);
@@ -134,6 +142,7 @@ export class SurveyView {
     return this.toPercentages(votesPerOption, votesPerQuestion);
   }
 
+  /** Counts the votes grouped by whichever id `keyOf` returns. */
   countVotesBy(votes: VoteRow[], keyOf: (vote: VoteRow) => number): Map<number, number> {
     const counts = new Map<number, number>();
 
@@ -145,6 +154,10 @@ export class SurveyView {
     return counts;
   }
 
+  /**
+   * Converts the per-option counts to percentages of their question's total. Options whose
+   * question has no votes are left out, so the caller reads them as 0.
+   */
   toPercentages(
     votesPerOption: Map<number, number>,
     votesPerQuestion: Map<number, number>,
@@ -161,14 +174,17 @@ export class SurveyView {
     return results;
   }
 
+  /** Returns `count` as a whole-number percentage of `total`. */
   toPercent(count: number, total: number): number {
     return Math.round((count / total) * 100);
   }
 
+  /** The answer ids to show as chosen: the submitted vote once cast, the pending picks before. */
   selectedFor(questionId: string): string[] {
     return this.hasVoted() ? this.myAnswerIds() : (this.selections()[questionId] ?? []);
   }
 
+  /** Adds or removes an answer from the pending selection, honouring the question's type. */
   onAnswerToggled(question: SurveyQuestion, answerId: string): void {
     const current = this.selectedFor(question.id);
     const next = question.allowMultiple
@@ -178,16 +194,19 @@ export class SurveyView {
     this.selections.update((all) => ({ ...all, [question.id]: next }));
   }
 
+  /** Toggles `answerId` within a multiple-choice selection, keeping the others. */
   toggleMany(current: string[], answerId: string): string[] {
     return current.includes(answerId)
       ? current.filter((id) => id !== answerId)
       : [...current, answerId];
   }
 
+  /** Toggles `answerId` as the single choice, clearing it when picked again. */
   toggleOne(current: string[], answerId: string): string[] {
     return current.includes(answerId) ? [] : [answerId];
   }
 
+  /** Handles the complete-survey press, ignoring it while the form is locked or empty. */
   async onCompleteAsync(): Promise<void> {
     const surveyId = this.surveyId();
     if (surveyId === null || !this.canSubmit()) return;
@@ -198,6 +217,7 @@ export class SurveyView {
     this.submitting.set(false);
   }
 
+  /** Casts the pending selections, reporting a failure through {@link voteError}. */
   async submitVotesAsync(surveyId: number): Promise<void> {
     try {
       await this.voting.castVotesAsync(surveyId, this.toSelectedAnswers());
@@ -206,6 +226,7 @@ export class SurveyView {
     }
   }
 
+  /** Flattens the pending selections into one entry per chosen answer, with numeric ids. */
   toSelectedAnswers(): SelectedAnswer[] {
     return Object.entries(this.selections()).flatMap(([questionId, answerIds]) =>
       answerIds.map((answerId) => ({
@@ -215,6 +236,7 @@ export class SurveyView {
     );
   }
 
+  /** Reduces a thrown value to a message suitable for {@link voteError}. */
   toMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
   }

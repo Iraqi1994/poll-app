@@ -15,10 +15,12 @@ export class SurveyQuestionView {
 
   answerToggled = output<string>();
 
+  /** Returns the display letter for an answer at `index`, so 0 becomes `A`. */
   getAnswerLabel(index: number): string {
     return String.fromCharCode(65 + index);
   }
 
+  /** Whether `answerId` is among the currently selected answers. */
   isSelected(answerId: string): boolean {
     return this.selectedIds().includes(answerId);
   }

@@ -19,6 +19,11 @@ const SUPABASE_KEY = 'sb_publishable_2I3zgxrFS431KFoytAJ9cA_UZjo8lSU';
 export class Supabase {
   readonly client: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  /**
+   * Reads every survey, newest first.
+   *
+   * @throws The Supabase error when the request fails.
+   */
   async getSurveysAsync(): Promise<SurveyRow[]> {
     const { data, error } = await this.client
       .from('surveys')
@@ -32,6 +37,11 @@ export class Supabase {
     return data ?? [];
   }
 
+  /**
+   * Reads every question across all surveys, in display order.
+   *
+   * @throws The Supabase error when the request fails.
+   */
   async getQuestionsAsync(): Promise<QuestionRow[]> {
     const { data, error } = await this.client
       .from('questions')
@@ -45,6 +55,11 @@ export class Supabase {
     return data ?? [];
   }
 
+  /**
+   * Reads every answer option across all questions, in display order.
+   *
+   * @throws The Supabase error when the request fails.
+   */
   async getOptionsAsync(): Promise<OptionRow[]> {
     const { data, error } = await this.client
       .from('options')
@@ -58,6 +73,11 @@ export class Supabase {
     return data ?? [];
   }
 
+  /**
+   * Reads every vote across all surveys, newest first.
+   *
+   * @throws The Supabase error when the request fails.
+   */
   async getVotesAsync(): Promise<VoteRow[]> {
     const { data, error } = await this.client
       .from('votes')
@@ -71,6 +91,11 @@ export class Supabase {
     return data ?? [];
   }
 
+  /**
+   * Inserts one survey and returns the stored row, including its generated id.
+   *
+   * @throws The Supabase error when the insert fails.
+   */
   async insertSurveyAsync(survey: NewSurvey): Promise<SurveyRow> {
     const { data, error } = await this.client.from('surveys').insert(survey).select().single();
 
@@ -81,6 +106,12 @@ export class Supabase {
     return data;
   }
 
+  /**
+   * Inserts the questions and returns the stored rows in display order, so their generated ids
+   * line up with the options that reference them.
+   *
+   * @throws The Supabase error when the insert fails.
+   */
   async insertQuestionsAsync(questions: NewQuestion[]): Promise<QuestionRow[]> {
     const { data, error } = await this.client
       .from('questions')
@@ -95,6 +126,11 @@ export class Supabase {
     return data ?? [];
   }
 
+  /**
+   * Inserts the answer options.
+   *
+   * @throws The Supabase error when the insert fails.
+   */
   async insertOptionsAsync(options: NewOption[]): Promise<void> {
     const { error } = await this.client.from('options').insert(options);
 
@@ -103,6 +139,11 @@ export class Supabase {
     }
   }
 
+  /**
+   * Inserts the votes, one row per selected answer.
+   *
+   * @throws The Supabase error when the insert fails.
+   */
   async insertVotesAsync(votes: NewVote[]): Promise<void> {
     const { error } = await this.client.from('votes').insert(votes);
 
@@ -111,6 +152,12 @@ export class Supabase {
     }
   }
 
+  /**
+   * Asks the backend whether `voterId` already voted in `surveyId`, which catches votes cast
+   * from another browser.
+   *
+   * @throws The Supabase error when the request fails.
+   */
   async hasVotedAsync(surveyId: number, voterId: string): Promise<boolean> {
     const { data, error } = await this.client.rpc('has_voted', {
       p_survey_id: surveyId,
@@ -124,6 +171,13 @@ export class Supabase {
     return data === true;
   }
 
+  /**
+   * Subscribes to vote changes.
+   *
+   * @param onChange Called on every insert, update or delete.
+   * @param onResync Called once the subscription is live, to catch up on anything missed.
+   * @returns A function that removes the channel.
+   */
   onVotesChanged(onChange: () => void, onResync: () => void): () => void {
     const channel = this.createVotesChannel(onChange);
     this.subscribeWithResync('votes', channel, onResync);
@@ -131,12 +185,20 @@ export class Supabase {
     return () => void this.client.removeChannel(channel);
   }
 
+  /** Builds the unsubscribed channel that listens for any change to the votes table. */
   createVotesChannel(onChange: () => void): RealtimeChannel {
     return this.client
       .channel('votes-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, () => onChange());
   }
 
+  /**
+   * Subscribes to survey changes, including newly added questions and options.
+   *
+   * @param onChange Called whenever a survey, question or option changes.
+   * @param onResync Called once the subscription is live, to catch up on anything missed.
+   * @returns A function that removes the channel.
+   */
   onSurveysChanged(onChange: () => void, onResync: () => void): () => void {
     const channel = this.createSurveysChannel(onChange);
     this.subscribeWithResync('surveys', channel, onResync);
@@ -144,6 +206,10 @@ export class Supabase {
     return () => void this.client.removeChannel(channel);
   }
 
+  /**
+   * Builds the unsubscribed channel covering any survey change plus inserts on questions and
+   * options, so a newly published survey arrives complete.
+   */
   createSurveysChannel(onChange: () => void): RealtimeChannel {
     return this.client
       .channel('surveys-changes')
@@ -156,6 +222,10 @@ export class Supabase {
       );
   }
 
+  /**
+   * Subscribes `channel`, calling `onResync` each time it reaches the subscribed state and
+   * logging any other status, so a reconnect refetches rather than silently drifting.
+   */
   subscribeWithResync(name: string, channel: RealtimeChannel, onResync: () => void): void {
     channel.subscribe((status, error) => {
       if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {

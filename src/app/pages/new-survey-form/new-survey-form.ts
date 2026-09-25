@@ -19,18 +19,18 @@ const REDIRECT_DELAY_MS = 2000;
   styleUrl: './new-survey-form.scss',
 })
 export class NewSurveyForm implements OnDestroy {
-  private readonly publishing = inject(Publishing);
-  private readonly router = inject(Router);
+  publishing = inject(Publishing);
+  router = inject(Router);
 
-  private redirectTimer: ReturnType<typeof setTimeout> | null = null;
+  redirectTimer: ReturnType<typeof setTimeout> | null = null;
 
   today: string = new Date().toISOString().split('T')[0];
 
-  readonly submitting = signal(false);
-  readonly published = signal(false);
-  readonly publishError = signal<string | null>(null);
+  submitting = signal(false);
+  published = signal(false);
+  publishError = signal<string | null>(null);
 
-  readonly publishLabel = computed(() => (this.submitting() ? 'Publishing…' : 'Publish'));
+  publishLabel = computed(() => (this.submitting() ? 'Publishing…' : 'Publish'));
 
   surveyForm = new FormGroup({
     name: new FormControl('', { validators: [Validators.required, Validators.minLength(3)] }),
@@ -43,23 +43,28 @@ export class NewSurveyForm implements OnDestroy {
     questions: new FormArray([this.createQuestion()]),
   });
 
+  /** Clears the pending redirect so it cannot fire after the form is gone. */
   ngOnDestroy(): void {
     this.cancelRedirect();
   }
 
+  /** The survey name control, used by the template for its validation message. */
   get name() {
     return this.surveyForm.get('name') as FormControl;
   }
 
+  /** The array holding one group per question. */
   get questions(): FormArray {
     return this.surveyForm.get('questions') as FormArray;
   }
 
+  /** The question groups, typed for the `Question` child's required input. */
   get questionGroups(): FormGroup[] {
     return this.questions.controls as FormGroup[];
   }
 
-  private createQuestion(): FormGroup {
+  /** Builds one question group, pre-filled with the two required answer controls. */
+  createQuestion(): FormGroup {
     return new FormGroup({
       text: new FormControl('', [Validators.required, Validators.maxLength(150)]),
       allowMultiple: new FormControl(false),
@@ -70,10 +75,12 @@ export class NewSurveyForm implements OnDestroy {
     });
   }
 
+  /** Appends an empty question to the form. */
   addQuestion(): void {
     this.questions.push(this.createQuestion());
   }
 
+  /** Removes the question at `index`. The first question is required, so it is kept. */
   removeQuestion(index: number): void {
     if (index === 0) {
       return;
@@ -81,10 +88,15 @@ export class NewSurveyForm implements OnDestroy {
     this.questions.removeAt(index);
   }
 
+  /** Empties one of the survey's top-level text controls. */
   clearField(name: 'name' | 'endDate' | 'description'): void {
     this.surveyForm.get(name)?.setValue('');
   }
 
+  /**
+   * Handles the publish submit: ignores repeat presses, surfaces validation errors on an
+   * invalid form, and otherwise saves while holding the button in its submitting state.
+   */
   async onPublishAsync(): Promise<void> {
     if (this.submitting() || this.published()) {
       return;
@@ -101,6 +113,10 @@ export class NewSurveyForm implements OnDestroy {
     this.submitting.set(false);
   }
 
+  /**
+   * Publishes the draft, then shows the confirmation and schedules the redirect home. A failure
+   * is reported through {@link publishError} rather than thrown.
+   */
   async savePublishAsync(): Promise<void> {
     try {
       await this.publishing.publishSurveyAsync(this.toDraft());
@@ -111,6 +127,7 @@ export class NewSurveyForm implements OnDestroy {
     }
   }
 
+  /** Reads the whole form into a draft, trimming every text value. */
   toDraft(): SurveyDraft {
     return {
       name: this.trimmed(this.surveyForm.get('name')),
@@ -121,6 +138,7 @@ export class NewSurveyForm implements OnDestroy {
     };
   }
 
+  /** Reads one question group into a draft question. */
   toQuestionDraft(group: FormGroup): QuestionDraft {
     return {
       text: this.trimmed(group.get('text')),
@@ -129,14 +147,17 @@ export class NewSurveyForm implements OnDestroy {
     };
   }
 
+  /** Reads a question group's answer controls into trimmed strings. */
   toAnswers(group: FormGroup): string[] {
     return (group.get('answers') as FormArray).controls.map((control) => this.trimmed(control));
   }
 
+  /** Returns a control's value as a trimmed string, treating a missing control as empty. */
   trimmed(control: { value: unknown } | null): string {
     return String(control?.value ?? '').trim();
   }
 
+  /** Starts the delayed redirect home, replacing any redirect already pending. */
   scheduleRedirect(): void {
     this.cancelRedirect();
     this.redirectTimer = setTimeout(() => {
@@ -145,6 +166,7 @@ export class NewSurveyForm implements OnDestroy {
     }, REDIRECT_DELAY_MS);
   }
 
+  /** Drops a pending redirect. */
   cancelRedirect(): void {
     if (this.redirectTimer === null) {
       return;
@@ -154,6 +176,7 @@ export class NewSurveyForm implements OnDestroy {
     this.redirectTimer = null;
   }
 
+  /** Reduces a thrown value to a message suitable for {@link publishError}. */
   toMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
   }

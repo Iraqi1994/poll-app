@@ -9,6 +9,9 @@ export class Voter {
 
   readonly id = this.loadOrCreateId();
 
+  /**
+   * Returns the browser's stored voter id, generating and persisting a new uuid on first use.
+   */
   loadOrCreateId(): string {
     const existing = this.storage.get<string>(VOTER_KEY);
     if (existing) {

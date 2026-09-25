@@ -8,6 +8,7 @@ const PREFIX = 'poll-app';
  */
 @Injectable({ providedIn: 'root' })
 export class LocalStore {
+  /** Reads and parses `key`, returning `null` when it is missing or unreadable. */
   get<T>(key: string): T | null {
     try {
       const raw = localStorage.getItem(`${PREFIX}:${key}`);
@@ -17,6 +18,7 @@ export class LocalStore {
     }
   }
 
+  /** Serialises `value` under `key`, logging instead of throwing when the write fails. */
   set<T>(key: string, value: T): void {
     try {
       localStorage.setItem(`${PREFIX}:${key}`, JSON.stringify(value));
@@ -25,6 +27,7 @@ export class LocalStore {
     }
   }
 
+  /** Deletes `key`, logging instead of throwing when the removal fails. */
   remove(key: string): void {
     try {
       localStorage.removeItem(`${PREFIX}:${key}`);

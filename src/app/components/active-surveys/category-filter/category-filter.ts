@@ -13,31 +13,35 @@ import { ALL_SURVEYS, SURVEY_CATEGORIES, SurveyCategory } from '../../../models/
   },
 })
 export class CategoryFilter {
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  host = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  readonly selected = input.required<SurveyCategory>();
-  readonly selectedChange = output<SurveyCategory>();
+  selected = input.required<SurveyCategory>();
+  selectedChange = output<SurveyCategory>();
 
-  readonly categories = SURVEY_CATEGORIES;
-  readonly open = signal(false);
+  categories = SURVEY_CATEGORIES;
+  open = signal(false);
 
-  readonly label = computed(() =>
+  label = computed(() =>
     this.selected() === ALL_SURVEYS ? 'Sort by categories' : this.selected(),
   );
 
+  /** Opens the dropdown when closed, and closes it when open. */
   toggle(): void {
     this.open.update((isOpen) => !isOpen);
   }
 
+  /** Closes the dropdown. */
   close(): void {
     this.open.set(false);
   }
 
+  /** Emits `category` to the parent and closes the dropdown. */
   select(category: SurveyCategory): void {
     this.selectedChange.emit(category);
     this.close();
   }
 
+  /** Closes the dropdown when the click landed outside this component. */
   onDocumentClick(event: MouseEvent): void {
     if (!this.host.nativeElement.contains(event.target as Node)) {
       this.close();

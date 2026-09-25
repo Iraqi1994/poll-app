@@ -11,6 +11,12 @@ export class Publishing {
   private readonly db = inject(Supabase);
   private readonly store = inject(SurveyStore);
 
+  /**
+   * Writes a draft to Supabase as a survey, its questions and their options, then refreshes
+   * the store so the new survey appears without a reload.
+   *
+   * @returns The id of the inserted survey.
+   */
   async publishSurveyAsync(draft: SurveyDraft): Promise<number> {
     const survey = await this.db.insertSurveyAsync(this.toNewSurvey(draft));
     const questions = await this.db.insertQuestionsAsync(this.toNewQuestions(survey.id, draft));
@@ -20,6 +26,7 @@ export class Publishing {
     return survey.id;
   }
 
+  /** Maps a draft to a survey row, turning empty optional fields into `null`. */
   toNewSurvey(draft: SurveyDraft): NewSurvey {
     return {
       name: draft.name,
@@ -29,6 +36,7 @@ export class Publishing {
     };
   }
 
+  /** Maps the draft's questions to rows for `surveyId`, numbering them from 1. */
   toNewQuestions(surveyId: number, draft: SurveyDraft): NewQuestion[] {
     return draft.questions.map((question, index) => ({
       survey_id: surveyId,
@@ -38,6 +46,10 @@ export class Publishing {
     }));
   }
 
+  /**
+   * Maps the draft's answers to option rows, pairing each inserted question with the draft
+   * question at the same index.
+   */
   toNewOptions(questions: QuestionRow[], draft: SurveyDraft): NewOption[] {
     return questions.flatMap((question, index) =>
       (draft.questions[index]?.answers ?? []).map((answer, answerIndex) => ({
