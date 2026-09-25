@@ -1,5 +1,5 @@
 <header class="form-header">
-  <img src="/logo-dark.svg" alt="Logo" class="form-header__logo" />
+  <img src="/logo.svg" alt="Logo" class="form-header__logo" />
 </header>
 <section>
   <div class="survey-header">
@@ -13,25 +13,29 @@
   <form id="survey-form" [formGroup]="surveyForm" (ngSubmit)="onPublishAsync()">
     <div class="survey-meta">
       <div class="survey-meta__left">
-        <div class="label-row">
-          <label for="name">Survey name</label>
-          @if (!name.valid && name.touched) {
-            <span class="field-error"
-              >Survey name is required and needs at least 3 characters.</span
-            >
-          }
-        </div>
-        <div class="field-row">
-          <input type="text" id="name" formControlName="name" />
-          <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
+        <div class="field field--spaced">
+          <div class="label-row">
+            <label for="name">Survey name</label>
+            @if (!name.valid && name.touched) {
+              <span class="field-error"
+                >Survey name is required and needs at least 3 characters.</span
+              >
+            }
+          </div>
+          <div class="field-row">
+            <input type="text" id="name" formControlName="name" />
+            <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
+          </div>
         </div>
 
         <div class="meta-row">
           <div class="meta-row__col">
-            <label for="endDate">Set end date (optional)</label>
-            <div class="field-row">
-              <input type="date" id="endDate" [min]="today" formControlName="endDate" />
-              <app-delete-button label="Clear end date" (pressed)="clearField('endDate')" />
+            <div class="field">
+              <label for="endDate">Set end date (optional)</label>
+              <div class="field-row">
+                <input type="date" id="endDate" [min]="today" formControlName="endDate" />
+                <app-delete-button label="Clear end date" (pressed)="clearField('endDate')" />
+              </div>
             </div>
           </div>
           <div class="meta-row__col meta-row__col--category">
@@ -40,10 +44,12 @@
         </div>
       </div>
       <div class="survey-meta__right">
-        <label for="description">Describing text (optional)</label>
-        <div class="field-row field-row--textarea">
-          <textarea id="description" formControlName="description"></textarea>
-          <app-delete-button label="Clear description" (pressed)="clearField('description')" />
+        <div class="field">
+          <label for="description">Describing text (optional)</label>
+          <div class="field-row field-row--textarea">
+            <textarea id="description" formControlName="description"></textarea>
+            <app-delete-button label="Clear description" (pressed)="clearField('description')" />
+          </div>
         </div>
       </div>
     </div>
