@@ -1,12 +1,12 @@
 <header class="form-header">
-  <img src="/logo.svg" alt="Logo" class="form-header__logo" />
+  <img src="logo.svg" alt="Logo" class="form-header__logo" />
 </header>
 <section>
   <div class="survey-header">
     <p class="draft">Draft</p>
     <a routerLink="/" class="cancel-btn">
       <span class="cancel-text">Cancel</span>
-      <img src="/close.svg" alt="Close" />
+      <img src="close.svg" alt="Close" />
     </a>
   </div>
   <h1>Create new survey</h1>
@@ -66,7 +66,7 @@
 
       <button type="button" class="add-question-btn" (click)="addQuestion()">
         <span>Add next question</span>
-        <img src="/new-survey-add-circle.svg" alt="add circle" />
+        <img src="new-survey-add-circle.svg" alt="add circle" />
       </button>
     </div>
   </form>
@@ -79,7 +79,7 @@
     } @else {
       <button type="submit" form="survey-form" class="publish-btn" [disabled]="submitting()">
         {{ publishLabel() }}
-        <img class="btn-icon" src="/check.svg" alt="" aria-hidden="true" />
+        <img class="btn-icon" src="check.svg" alt="" aria-hidden="true" />
       </button>
     }
   </div>

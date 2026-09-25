@@ -7,4 +7,5 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'new-survey', component: NewSurveyForm },
   { path: 'survey/:id', component: SurveyView },
+  { path: '**', redirectTo: '' },
 ];
