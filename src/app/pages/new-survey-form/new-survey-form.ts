@@ -33,7 +33,9 @@ export class NewSurveyForm implements OnDestroy {
   publishLabel = computed(() => (this.submitting() ? 'Publishing…' : 'Publish'));
 
   surveyForm = new FormGroup({
-    name: new FormControl('', { validators: [Validators.required, Validators.minLength(3)] }),
+    name: new FormControl('', {
+      validators: [Validators.required, Validators.minLength(3), Validators.maxLength(100)],
+    }),
     description: new FormControl('', { validators: [Validators.maxLength(200)] }),
     endDate: new FormControl(''),
     category: new FormControl<SurveyCategory | ''>('', {
