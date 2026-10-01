@@ -72,6 +72,14 @@ textarea.ng-invalid.ng-touched {
   border-color: #ff8a8a;
 }
 
+#endDate {
+  cursor: pointer;
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+}
+
 .field {
   display: contents;
 }
