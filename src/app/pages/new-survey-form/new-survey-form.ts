@@ -71,8 +71,8 @@ export class NewSurveyForm implements OnDestroy {
       text: new FormControl('', [Validators.required, Validators.maxLength(150)]),
       allowMultiple: new FormControl(false),
       answers: new FormArray([
-        new FormControl('', Validators.required),
-        new FormControl('', Validators.required),
+        new FormControl('', { validators: [Validators.required, Validators.maxLength(50)] }),
+        new FormControl('', { validators: [Validators.required, Validators.maxLength(50)] }),
       ]),
     });
   }
