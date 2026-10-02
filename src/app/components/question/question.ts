@@ -14,6 +14,7 @@ export class Question {
   questionIndex = input<number>(1);
   required = input<boolean>(false);
   remove = output<void>();
+  notDeletableAttempts = signal<ReadonlySet<number>>(new Set());
 
   /** The question text control of the group passed in by the parent form. */
   get text(): FormControl {
@@ -39,8 +40,6 @@ export class Question {
   get textErrorMessage(): string {
     return this.required() ? 'The first question is required.' : 'Question text is required.';
   }
-
-  notDeletableAttempts = signal<ReadonlySet<number>>(new Set());
 
   /** Returns the display letter for an answer at `index`, so 0 becomes `A`. */
   getAnswerLabel(index: number): string {
@@ -71,7 +70,9 @@ export class Question {
 
   /** Appends an empty, required answer control to the group. */
   addAnswer(): void {
-    this.answers.push(new FormControl('', Validators.required));
+    this.answers.push(
+      new FormControl('', { validators: [Validators.required, Validators.maxLength(50)] }),
+    );
   }
 
   /** Empties the question text control. */
