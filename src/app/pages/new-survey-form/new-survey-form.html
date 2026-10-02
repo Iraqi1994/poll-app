@@ -47,9 +47,10 @@
         <div class="field">
           <label for="description">Describing text (optional)</label>
           <div class="field-row field-row--textarea">
-            <textarea id="description" formControlName="description"></textarea>
+            <textarea id="description" formControlName="description" maxlength="250"></textarea>
             <app-delete-button label="Clear description" (pressed)="clearField('description')" />
           </div>
+          <span class="char-counter">{{ descriptionLength }} / 250</span>
         </div>
       </div>
     </div>

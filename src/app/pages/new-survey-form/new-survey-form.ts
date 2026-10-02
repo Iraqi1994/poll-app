@@ -36,7 +36,7 @@ export class NewSurveyForm implements OnDestroy {
     name: new FormControl('', {
       validators: [Validators.required, Validators.minLength(3), Validators.maxLength(100)],
     }),
-    description: new FormControl('', { validators: [Validators.maxLength(200)] }),
+    description: new FormControl('', { validators: [Validators.maxLength(250)] }),
     endDate: new FormControl(''),
     category: new FormControl<SurveyCategory | ''>('', {
       nonNullable: true,
@@ -63,6 +63,11 @@ export class NewSurveyForm implements OnDestroy {
   /** The question groups, typed for the `Question` child's required input. */
   get questionGroups(): FormGroup[] {
     return this.questions.controls as FormGroup[];
+  }
+
+  /** Current length of the description text, for the character counter. */
+  get descriptionLength(): number {
+    return this.surveyForm.get('description')?.value?.length ?? 0;
   }
 
   /** Builds one question group, pre-filled with the two required answer controls. */
