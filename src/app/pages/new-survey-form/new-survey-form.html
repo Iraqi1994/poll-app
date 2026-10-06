@@ -17,15 +17,14 @@
           <div class="label-row">
             <label for="name">Survey name</label>
             @if (!name.valid && name.touched) {
-              <span class="field-error"
-                >Survey name is required and needs at least 3 characters.</span
-              >
+              <span class="field-error">{{ nameErrorMessage }}</span>
             }
           </div>
           <div class="field-row">
-            <input type="text" id="name" formControlName="name" />
+            <input type="text" id="name" formControlName="name" maxlength="80" />
             <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
           </div>
+          <span class="char-counter">{{ nameLength }} / 80</span>
         </div>
 
         <div class="meta-row">
