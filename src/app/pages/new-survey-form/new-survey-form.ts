@@ -34,7 +34,7 @@ export class NewSurveyForm implements OnDestroy {
 
   surveyForm = new FormGroup({
     name: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(3), Validators.maxLength(100)],
+      validators: [Validators.required, Validators.minLength(3), Validators.maxLength(80)],
     }),
     description: new FormControl('', { validators: [Validators.maxLength(250)] }),
     endDate: new FormControl(''),
@@ -53,6 +53,18 @@ export class NewSurveyForm implements OnDestroy {
   /** The survey name control, used by the template for its validation message. */
   get name() {
     return this.surveyForm.get('name') as FormControl;
+  }
+
+  /** Current length of the survey name, for the character counter. */
+  get nameLength(): number {
+    return this.name.value?.length ?? 0;
+  }
+
+  /** The validation message for the survey name, naming the rule it currently breaks. */
+  get nameErrorMessage(): string {
+    return this.name.hasError('required')
+      ? 'Survey name is required.'
+      : 'Survey name needs at least 3 characters.';
   }
 
   /** The array holding one group per question. */
