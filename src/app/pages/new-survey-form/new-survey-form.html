@@ -14,16 +14,14 @@
     <div class="survey-meta">
       <div class="survey-meta__left">
         <div class="field field--spaced">
-          <div class="label-row">
-            <label for="name">Survey name</label>
-            @if (!name.valid && name.touched) {
-              <span class="field-error">{{ nameErrorMessage }}</span>
-            }
-          </div>
+          <label for="name">Survey name</label>
           <div class="field-row">
             <input type="text" id="name" formControlName="name" maxlength="80" />
             <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
           </div>
+          @if (!name.valid && name.touched) {
+            <span class="field-error">{{ nameErrorMessage }}</span>
+          }
           <span class="char-counter">{{ nameLength }} / 80</span>
         </div>
 
