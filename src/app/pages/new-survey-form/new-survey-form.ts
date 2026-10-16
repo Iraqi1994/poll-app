@@ -199,4 +199,8 @@ export class NewSurveyForm implements OnDestroy {
   toMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
   }
+
+  openDatePicker(event: Event): void {
+    (event.target as HTMLInputElement).showPicker();
+  }
 }

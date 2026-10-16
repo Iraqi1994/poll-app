@@ -30,7 +30,13 @@
             <div class="field">
               <label for="endDate">Set end date (optional)</label>
               <div class="field-row">
-                <input type="date" id="endDate" [min]="today" formControlName="endDate" />
+                <input
+                  type="date"
+                  id="endDate"
+                  [min]="today"
+                  formControlName="endDate"
+                  (click)="openDatePicker($event)"
+                />
                 <app-delete-button label="Clear end date" (pressed)="clearField('endDate')" />
               </div>
             </div>

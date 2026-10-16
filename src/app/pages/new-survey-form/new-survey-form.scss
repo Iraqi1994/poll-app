@@ -420,6 +420,7 @@ h1 {
   .meta-row {
     flex-direction: column;
     gap: 0;
+    align-items: stretch;
 
     &__col--category {
       justify-content: flex-start;
