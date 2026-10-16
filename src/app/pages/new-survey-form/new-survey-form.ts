@@ -200,6 +200,7 @@ export class NewSurveyForm implements OnDestroy {
     return error instanceof Error ? error.message : String(error);
   }
 
+  /** Opens the native date picker of the clicked date input, not only via its calendar icon. */
   openDatePicker(event: Event): void {
     (event.target as HTMLInputElement).showPicker();
   }
