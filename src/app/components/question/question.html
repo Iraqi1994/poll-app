@@ -1,11 +1,6 @@
 <div class="question-block" [formGroup]="questionGroup()">
   <div class="question-header">
-    <div class="label-row">
-      <p class="question-label">{{ questionIndex() }}. Question</p>
-      @if (!text.valid && text.touched) {
-        <span class="field-error">{{ textErrorMessage }}</span>
-      }
-    </div>
+    <p class="question-label">{{ questionIndex() }}. Question</p>
     <app-delete-button label="Remove question {{ questionIndex() }}" (pressed)="onRemove()" />
   </div>
 
@@ -19,6 +14,9 @@
     />
     <app-delete-button label="Clear question text" (pressed)="clearText()" />
   </div>
+  @if (!text.valid && text.touched) {
+    <span class="field-error">{{ textErrorMessage }}</span>
+  }
   <span class="char-counter">{{ questionTextLength }} / 150</span>
 
   <div class="answers-header">
