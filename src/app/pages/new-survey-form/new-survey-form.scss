@@ -340,6 +340,23 @@ h1 {
   }
 }
 
+@media (max-width: 930px) {
+  .meta-row {
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    margin-bottom: 0;
+
+    &__col--category {
+      justify-content: flex-start;
+      align-self: stretch;
+      padding-left: 0;
+      margin-top: 32px;
+      min-height: 65px;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   .field {
     display: grid;
@@ -410,7 +427,7 @@ h1 {
   }
 
   .meta-row__col--category {
-    min-height: 32px;
+    min-height: 60px;
   }
 
   .survey-questions {
@@ -440,20 +457,5 @@ h1 {
 
   .form-footer {
     justify-content: center;
-  }
-}
-
-@media (max-width: 479px) {
-  .meta-row {
-    flex-direction: column;
-    gap: 0;
-    align-items: stretch;
-
-    &__col--category {
-      justify-content: flex-start;
-      align-self: stretch;
-      padding-left: 0px;
-      margin-top: 32px;
-    }
   }
 }
