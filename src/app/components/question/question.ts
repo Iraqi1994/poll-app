@@ -98,6 +98,21 @@ export class Question {
     this.notDeletableAttempts.update((attempts) => new Set(attempts).add(index));
   }
 
+  /**
+   * Forgets a refused delete for `index`. Editing the answer replaces the refusal with whatever
+   * the value itself warrants, so an answer emptied by hand reads as missing rather than undeletable.
+   */
+  clearNotDeletable(index: number): void {
+    if (!this.isNotDeletable(index)) {
+      return;
+    }
+    this.notDeletableAttempts.update((attempts) => {
+      const remaining = new Set(attempts);
+      remaining.delete(index);
+      return remaining;
+    });
+  }
+
   /** Asks the parent to remove this question, unless it is the required first one. */
   onRemove(): void {
     if (this.required()) {
