@@ -50,8 +50,11 @@
     </div>
   }
 
-  <button type="button" class="add-answer-btn" (click)="addAnswer()">
-    <span>Add answer</span>
-    <img src="new-survey-add-circle.svg" alt="Add circle" />
-  </button>
+  <div class="add-answer-row">
+    <button type="button" class="add-answer-btn" [disabled]="!canAddAnswer" (click)="addAnswer()">
+      <span>Add answer</span>
+      <img src="new-survey-add-circle.svg" alt="Add circle" />
+    </button>
+    <span class="add-answer-hint">You can add up to {{ maxAnswers }} answer fields.</span>
+  </div>
 </div>
