@@ -3,6 +3,8 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 
 import { DeleteButton } from '../delete-button/delete-button';
 
+const MAX_ANSWERS = 6;
+
 @Component({
   selector: 'app-question',
   imports: [ReactiveFormsModule, DeleteButton],
@@ -15,6 +17,7 @@ export class Question {
   required = input<boolean>(false);
   remove = output<void>();
   notDeletableAttempts = signal<ReadonlySet<number>>(new Set());
+  maxAnswers = MAX_ANSWERS;
 
   /** The question text control of the group passed in by the parent form. */
   get text(): FormControl {
@@ -29,6 +32,11 @@ export class Question {
   /** The answer controls, typed for the template's `@for` loop. */
   get answerControls(): FormControl[] {
     return this.answers.controls as FormControl[];
+  }
+
+  /** Whether another answer still fits under the cap. */
+  get canAddAnswer(): boolean {
+    return this.answers.length < MAX_ANSWERS;
   }
 
   /** Current length of the question text, for the character counter. */
@@ -68,8 +76,11 @@ export class Question {
     return null;
   }
 
-  /** Appends an empty, required answer control to the group. */
+  /** Appends an empty, required answer control to the group, unless the cap is reached. */
   addAnswer(): void {
+    if (!this.canAddAnswer) {
+      return;
+    }
     this.answers.push(
       new FormControl('', { validators: [Validators.required, Validators.maxLength(50)] }),
     );
