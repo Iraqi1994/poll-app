@@ -14,10 +14,12 @@
     />
     <app-delete-button label="Clear question text" (pressed)="clearText()" />
   </div>
-  @if (!text.valid && text.touched) {
-    <span class="field-error">{{ textErrorMessage }}</span>
-  }
-  <span class="char-counter">{{ questionTextLength }} / 150</span>
+  <div class="field-footer">
+    @if (!text.valid && text.touched) {
+      <span class="field-error">{{ textErrorMessage }}</span>
+    }
+    <span class="char-counter">{{ questionTextLength }} / 150</span>
+  </div>
 
   <div class="answers-header">
     <span class="answers-label">Answers</span>
