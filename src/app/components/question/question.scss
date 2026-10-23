@@ -66,12 +66,24 @@
   border-color: #ff8a8a;
 }
 
+.field-footer {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -4px;
+
+  .field-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 2px;
+  }
+}
+
 .char-counter {
   font-family: 'Mulish', sans-serif;
-  align-self: flex-end;
   font-size: 12px;
   color: #a0a0b0;
-  margin-top: -4px;
 }
 
 .answers-header {

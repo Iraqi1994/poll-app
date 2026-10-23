@@ -19,10 +19,12 @@
             <input type="text" id="name" formControlName="name" maxlength="80" />
             <app-delete-button label="Clear survey name" (pressed)="clearField('name')" />
           </div>
-          @if (!name.valid && name.touched) {
-            <span class="field-error">{{ nameErrorMessage }}</span>
-          }
-          <span class="char-counter">{{ nameLength }} / 80</span>
+          <div class="field-footer">
+            @if (!name.valid && name.touched) {
+              <span class="field-error">{{ nameErrorMessage }}</span>
+            }
+            <span class="char-counter">{{ nameLength }} / 80</span>
+          </div>
         </div>
 
         <div class="meta-row">
