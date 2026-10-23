@@ -33,7 +33,12 @@
     <div class="answer-field">
       <div class="answer-row">
         <span class="answer-letter">{{ getAnswerLabel($index) }}.</span>
-        <input type="text" class="answer-input" [formControl]="control" />
+        <input
+          type="text"
+          class="answer-input"
+          [formControl]="control"
+          (input)="clearNotDeletable($index)"
+        />
         <app-delete-button
           label="Remove answer {{ getAnswerLabel($index) }}"
           (pressed)="removeAnswer($index)"
