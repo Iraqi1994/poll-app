@@ -7,7 +7,6 @@ import {
   SurveyQuestion,
   SurveyResults as SurveyResultsMap,
 } from '../../models/survey';
-import { VoteRow } from '../../interfaces/voteRow';
 import { SelectedAnswer } from '../../interfaces/selectedAnswer';
 import { SurveyQuestionView } from '../../components/survey-question-view/survey-question-view';
 import { SurveyResults } from '../../components/survey-results/survey-results';
@@ -85,6 +84,12 @@ export class SurveyView {
 
   canSubmit = computed(() => !this.locked() && this.selectedCount() > 0);
 
+  previewVotes = computed<SelectedAnswer[]>(() => {
+    if (this.closed() || this.myAnswerIds().length > 0) return [];
+
+    return this.toSelectedAnswers();
+  });
+
   completeLabel = computed(() => {
     if (this.hasVoted()) return 'Already voted';
     if (this.submitting()) return 'Submitting…';
@@ -133,21 +138,32 @@ export class SurveyView {
       .map((option) => ({ id: String(option.id), text: option.text ?? '' }));
   }
 
-  /** Tallies a survey's votes and returns each option's share of its own question. */
+  /** Tallies the cast votes plus the preview as each option's share of its own question. */
   getResults(surveyId: number): SurveyResultsMap {
-    const votes = this.store.votes().filter((vote) => vote.survey_id === surveyId);
-    const votesPerQuestion = this.countVotesBy(votes, (vote) => vote.question_id);
-    const votesPerOption = this.countVotesBy(votes, (vote) => vote.option_id);
+    const answers = [...this.toCastAnswers(surveyId), ...this.previewVotes()];
+    const votesPerQuestion = this.countVotesBy(answers, (answer) => answer.questionId);
+    const votesPerOption = this.countVotesBy(answers, (answer) => answer.optionId);
 
     return this.toPercentages(votesPerOption, votesPerQuestion);
   }
 
-  /** Counts the votes grouped by whichever id `keyOf` returns. */
-  countVotesBy(votes: VoteRow[], keyOf: (vote: VoteRow) => number): Map<number, number> {
+  /** Reads a survey's cast votes in the same shape as a pending selection. */
+  toCastAnswers(surveyId: number): SelectedAnswer[] {
+    return this.store
+      .votes()
+      .filter((vote) => vote.survey_id === surveyId)
+      .map((vote) => ({ questionId: vote.question_id, optionId: vote.option_id }));
+  }
+
+  /** Counts the answers grouped by whichever id `keyOf` returns. */
+  countVotesBy(
+    answers: SelectedAnswer[],
+    keyOf: (answer: SelectedAnswer) => number,
+  ): Map<number, number> {
     const counts = new Map<number, number>();
 
-    for (const vote of votes) {
-      const key = keyOf(vote);
+    for (const answer of answers) {
+      const key = keyOf(answer);
       counts.set(key, (counts.get(key) ?? 0) + 1);
     }
 
