@@ -1,5 +1,6 @@
 :host {
   display: block;
+  min-width: 0;
   font-family: 'Mulish', sans-serif;
   color: #35273a;
 }
@@ -23,6 +24,7 @@
   font-weight: 700;
   font-size: 14px;
   margin: 0 0 10px;
+  overflow-wrap: anywhere;
 }
 
 .bar-row {

@@ -1,6 +1,6 @@
 <div class="survey" [routerLink]="['/survey', survey().id]">
   <p class="survey__category">{{ survey().category ?? 'Uncategorized' }}</p>
-  <h3 class="survey__title">{{ survey().name ?? 'Untitled Survey' }}</h3>
+  <h3 class="survey__title" [title]="survey().name ?? 'Untitled Survey'">{{ survey().name ?? 'Untitled Survey' }}</h3>
   <p class="survey__ends">
     @if (survey().end_date) {
       Ends {{ survey().end_date | date: 'mediumDate' }}

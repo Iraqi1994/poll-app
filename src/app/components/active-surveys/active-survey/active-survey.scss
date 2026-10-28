@@ -15,6 +15,9 @@
     color: #ffffff;
     font-weight: 700;
     font-size: 24px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &__ends {
