@@ -78,11 +78,15 @@ export class SurveyView {
 
   locked = computed(() => this.hasVoted() || this.submitting() || this.closed());
 
-  selectedCount = computed(() =>
-    Object.values(this.selections()).reduce((total, ids) => total + ids.length, 0),
-  );
+  allAnswered = computed(() => {
+    const questions = this.survey()?.questions ?? [];
+    return (
+      questions.length > 0 &&
+      questions.every((question) => (this.selections()[question.id] ?? []).length > 0)
+    );
+  });
 
-  canSubmit = computed(() => !this.locked() && this.selectedCount() > 0);
+  canSubmit = computed(() => !this.locked() && this.allAnswered());
 
   previewVotes = computed<SelectedAnswer[]>(() => {
     if (this.closed() || this.myAnswerIds().length > 0) return [];
