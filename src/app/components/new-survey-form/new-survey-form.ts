@@ -1,28 +1,42 @@
-import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  afterNextRender,
+  computed,
+  inject,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 
-import { CategorySelect } from '../../components/category-select/category-select';
-import { DeleteButton } from '../../components/delete-button/delete-button';
-import { Question } from '../../components/question/question';
+import { CategorySelect } from '../category-select/category-select';
+import { DeleteButton } from '../delete-button/delete-button';
+import { Question } from '../question/question';
 import { QuestionDraft } from '../../interfaces/surveyDraft';
 import { SurveyDraft } from '../../interfaces/surveyDraft';
 import { SurveyCategory } from '../../models/survey';
 import { Publishing } from '../../services/publishing';
 
-const REDIRECT_DELAY_MS = 2000;
+const CLOSE_DELAY_MS = 2000;
 
 @Component({
   selector: 'app-new-survey-form',
-  imports: [ReactiveFormsModule, RouterLink, Question, DeleteButton, CategorySelect],
+  imports: [ReactiveFormsModule, Question, DeleteButton, CategorySelect],
   templateUrl: './new-survey-form.html',
   styleUrl: './new-survey-form.scss',
 })
 export class NewSurveyForm implements OnDestroy {
   publishing = inject(Publishing);
-  router = inject(Router);
 
-  redirectTimer: ReturnType<typeof setTimeout> | null = null;
+  closed = output<void>();
+
+  dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+
+  closeTimer: ReturnType<typeof setTimeout> | null = null;
+
+  pressStartedOutside = false;
 
   today: string = new Date().toISOString().split('T')[0];
 
@@ -45,9 +59,14 @@ export class NewSurveyForm implements OnDestroy {
     questions: new FormArray([this.createQuestion()]),
   });
 
-  /** Clears the pending redirect so it cannot fire after the form is gone. */
+  /** Opens the dialog as a modal once it is in the DOM, so the page behind becomes inert. */
+  constructor() {
+    afterNextRender(() => this.dialog().nativeElement.showModal());
+  }
+
+  /** Clears the pending close so it cannot fire after the form is gone. */
   ngOnDestroy(): void {
-    this.cancelRedirect();
+    this.cancelClose();
   }
 
   /** The survey name control, used by the template for its validation message. */
@@ -133,14 +152,14 @@ export class NewSurveyForm implements OnDestroy {
   }
 
   /**
-   * Publishes the draft, then shows the confirmation and schedules the redirect home. A failure
+   * Publishes the draft, then shows the confirmation and schedules the dialog to close. A failure
    * is reported through {@link publishError} rather than thrown.
    */
   async savePublishAsync(): Promise<void> {
     try {
       await this.publishing.publishSurveyAsync(this.toDraft());
       this.published.set(true);
-      this.scheduleRedirect();
+      this.scheduleClose();
     } catch (error) {
       this.publishError.set(this.toMessage(error));
     }
@@ -176,23 +195,23 @@ export class NewSurveyForm implements OnDestroy {
     return String(control?.value ?? '').trim();
   }
 
-  /** Starts the delayed redirect home, replacing any redirect already pending. */
-  scheduleRedirect(): void {
-    this.cancelRedirect();
-    this.redirectTimer = setTimeout(() => {
-      this.redirectTimer = null;
-      void this.router.navigate(['/']);
-    }, REDIRECT_DELAY_MS);
+  /** Starts the delayed close of the dialog, replacing any close already pending. */
+  scheduleClose(): void {
+    this.cancelClose();
+    this.closeTimer = setTimeout(() => {
+      this.closeTimer = null;
+      this.closed.emit();
+    }, CLOSE_DELAY_MS);
   }
 
-  /** Drops a pending redirect. */
-  cancelRedirect(): void {
-    if (this.redirectTimer === null) {
+  /** Drops a pending close. */
+  cancelClose(): void {
+    if (this.closeTimer === null) {
       return;
     }
 
-    clearTimeout(this.redirectTimer);
-    this.redirectTimer = null;
+    clearTimeout(this.closeTimer);
+    this.closeTimer = null;
   }
 
   /** Reduces a thrown value to a message suitable for {@link publishError}. */
@@ -203,5 +222,31 @@ export class NewSurveyForm implements OnDestroy {
   /** Opens the native date picker of the clicked date input, not only via its calendar icon. */
   openDatePicker(event: Event): void {
     (event.target as HTMLInputElement).showPicker();
+  }
+
+  /** Remembers whether the press began on the backdrop, for {@link onDialogClick}. */
+  onDialogMouseDown(event: MouseEvent): void {
+    this.pressStartedOutside = this.isOutsideDialog(event);
+  }
+
+  /**
+   * Closes the dialog on a backdrop click. Both press and release must be outside, so dragging a
+   * text selection out of an input does not discard the form.
+   */
+  onDialogClick(event: MouseEvent): void {
+    if (this.pressStartedOutside && this.isOutsideDialog(event)) {
+      this.closed.emit();
+    }
+  }
+
+  /** Whether the pointer position of `event` lies outside the dialog's box, on the backdrop. */
+  isOutsideDialog(event: MouseEvent): boolean {
+    const rect = this.dialog().nativeElement.getBoundingClientRect();
+    return (
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+    );
   }
 }

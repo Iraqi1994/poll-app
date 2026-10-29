@@ -1,4 +1,8 @@
-<button routerLink="/new-survey">
+<button type="button" (click)="open.set(true)">
   {{ label() }}
   <img class="btn-icon" src="add-circle.svg" alt="" aria-hidden="true" />
 </button>
+
+@if (open()) {
+  <app-new-survey-form (closed)="open.set(false)" />
+}

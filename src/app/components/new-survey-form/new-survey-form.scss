@@ -1,10 +1,18 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #35273a;
+.survey-dialog {
+  width: min(1166px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: 5px 100px 5px 5px;
+  background: transparent;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::backdrop {
+    background-color: rgba(34, 18, 39, 0.75);
+  }
 }
 
 .form-header {
@@ -27,7 +35,7 @@ form {
   background-color: #8e709929;
   padding: 40px 32px;
   border-radius: 5px 100px 5px 5px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 label {
@@ -228,10 +236,8 @@ h1 {
 
 .form-footer {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
   gap: 16px;
-  min-height: 86px;
   overflow: hidden;
 }
 
@@ -288,12 +294,12 @@ h1 {
   box-sizing: border-box;
   width: 357px;
   max-width: 100%;
-  height: 86px;
+  height: 48px;
   margin: 0;
   padding: 0 24px;
   background-color: #fee9d4;
   color: #221227;
-  border-radius: 5px 50px 5px 5px;
+  border-radius: 5px 24px 5px 5px;
   font-family: 'Nerko One', sans-serif;
   font-weight: 400;
   font-size: 24px;
@@ -358,6 +364,15 @@ h1 {
 }
 
 @media (max-width: 767px) {
+  .survey-dialog {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    background-color: #35273a;
+  }
+
   .field {
     display: grid;
     grid-template-columns: 1fr auto;

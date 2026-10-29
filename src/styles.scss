@@ -31,6 +31,10 @@ html {
   scrollbar-gutter: stable;
 }
 
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 body {
   background-color: #35273a;
 }
